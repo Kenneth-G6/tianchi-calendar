@@ -181,9 +181,12 @@ def main():
         cache = json.load(open(DAILIES, encoding="utf-8"))
 
     # 1) 列表
+    list_ok, n_arts = False, 0
     try:
         arts = list_articles()
         dailies = [x for x in arts if "今日长白山" in (x.get("name") or "")]
+        n_arts = len(arts)
+        list_ok = True
         print(f"[list] articles={len(arts)} dailies={len(dailies)}")
     except Exception as e:
         print(f"[list] FAILED {type(e).__name__}: {e} — 使用缓存继续", file=sys.stderr)
@@ -347,6 +350,20 @@ def main():
     for k, v in repl.items():
         html = html.replace(k, v)
     open(OUT, "w", encoding="utf-8").write(html)
+    cst = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8)))
+    json.dump({
+        "updated_at_cst": cst.strftime("%Y-%m-%d %H:%M:%S"),
+        "latest_data_date": end.isoformat(),
+        "list_api_ok": list_ok,
+        "list_articles": n_arts,
+        "dailies_in_cache": len(cache),
+        "new_details_fetched": new,
+        "window_days": len(serial),
+        "figures": str(YR),
+        "play_rate_pct": rate,
+        "daily_bulletins": ndaily,
+    }, open(os.path.join(DATA, "last-run.json"), "w", encoding="utf-8"),
+        ensure_ascii=False, indent=1)
     print(f"[done] {OUT} {len(html.encode('utf-8'))//1024} KB | {len(serial)} days | {YR} rate {rate}% | daily {ndaily}")
 
 
