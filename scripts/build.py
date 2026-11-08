@@ -270,7 +270,9 @@ def main():
 
     # 5) 统计
     YR = int(max(x["date"][:4] for x in serial if x["status"] != "NO_RECORD"))
-    y_start = max(START_DATE, datetime.date(YR, 1, 1)).isoformat()
+    # 疫情/存档未覆盖的期间不计入分母：以当年或全局最早公报日中的较晚者为起点
+    first_daily = datetime.date.fromisoformat(min(x["date"] for x in serial if x["level"] == "daily"))
+    y_start = max(START_DATE, datetime.date(YR, 1, 1), first_daily).isoformat()
     yv = [x for x in serial if x["date"] >= y_start]
     rec = [x for x in yv if x["status"] != "NO_RECORD"]
     play = [x for x in rec if x["status"] in PLAY]
@@ -343,6 +345,7 @@ def main():
         "{{HIST_NOTE}}": f"{START_DATE.isoformat()} 至 {dailies_min}，为关闭日或个别开放日",
         "{{HIST_FROM}}": START_DATE.isoformat(),
         "{{LATEST}}": end.isoformat(),
+        "{{BUILT_AT}}": datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime("%Y-%m-%d %H:%M"),
         "{{FINDINGS}}": findings,
         "{{DATA}}": payload,
     }
