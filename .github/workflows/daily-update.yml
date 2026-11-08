@@ -1,0 +1,77 @@
+name: 每日更新 · 长白山天池逐日台账
+
+on:
+  schedule:
+    # 北京时间 18:00 = UTC 10:00
+    - cron: "0 10 * * *"
+  workflow_dispatch:
+    inputs:
+      full_refresh:
+        description: "忽略缓存全量重抓（用于规则变更后重建）"
+        required: false
+        default: "false"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 安装依赖
+        run: pip install requests
+
+      - name: 抓取并生成日历
+        env:
+          FULL_REFRESH: ${{ github.event.inputs.full_refresh }}
+        run: |
+          if [ "$FULL_REFRESH" = "true" ]; then
+            echo "全量重抓：清空缓存"
+            rm -f data/dailies.json data/anchors.json
+          fi
+          python scripts/build.py
+
+      - name: 提交数据与页面
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html data/
+          if git diff --staged --quiet; then
+            echo "无变更，跳过提交"
+          else
+            git commit -m "chore(auto): 更新台账 $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M')"
+            git push
+          fi
+
+      - name: 准备 Pages 产物
+        run: |
+          mkdir -p _site
+          cp index.html _site/
+          echo "长白山北景区天池逐日开放台账" > _site/README.txt
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
