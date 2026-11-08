@@ -15,11 +15,9 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: daily-update
   cancel-in-progress: false
 
 jobs:
@@ -51,43 +49,14 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html data/
-          if git diff --staged --quiet; then
-            echo "无变更，跳过提交"
-          else
-            git commit -m "chore(auto): 更新台账 $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M') [skip ci]"
-            git push
-          fi
+          git commit -m "chore(auto): 更新台账 $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M') [skip ci]"
+          git push
 
-      - name: 确保 Pages 站点已启用
+      - name: 摘要
+        if: always()
         run: |
-          code=$(curl -s -o /tmp/pages.json -w "%{http_code}" -X POST \
-            -H "Authorization: Bearer ${{ github.token }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages" \
-            -d '{"build_type":"workflow"}')
-          echo "创建 Pages 站点返回 HTTP $code"
-          head -c 300 /tmp/pages.json; echo
-          # 409 = 已存在，属正常
-          if [ "$code" = "403" ] || [ "$code" = "404" ]; then
-            echo "::warning::自动启用 Pages 失败，需在仓库 Settings → Pages 手动选择 Source = GitHub Actions"
-          fi
-
-      - name: 准备 Pages 产物
-        run: |
-          mkdir -p _site
-          cp index.html _site/
-          echo "长白山北景区天池逐日开放台账" > _site/README.txt
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          {
+            echo "### 长白山天池台账 · 构建结果"
+            echo ""
+            cat data/last-run.json 2>/dev/null || echo "无 last-run.json"
+          } >> $GITHUB_STEP_SUMMARY
