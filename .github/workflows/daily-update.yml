@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       full_refresh:
-        description: "忽略缓存全量重抓（用于规则变更后重建）"
+        description: "全量回扫。默认不勾＝仅增量（只看最近 14 天），规则变更或缓存损坏时才需要"
         required: false
         default: "false"
 

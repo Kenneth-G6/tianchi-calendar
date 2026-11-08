@@ -24,7 +24,8 @@ OUT = os.path.join(ROOT, "index.html")
 
 PPH_ID = "111214"
 START_DATE = datetime.date(2023, 11, 9)
-LIST_STOP_BEFORE = datetime.date(2023, 9, 1)
+LIST_STOP_BEFORE = datetime.date(2023, 9, 1)   # 全量模式的停止线
+LOOKBACK_DAYS = 14                                  # 增量模式回看天数（容错漏跑）
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                   "(KHTML, like Gecko) Chrome/120.0 Safari/537.36",
@@ -75,9 +76,13 @@ BLOCK = {"CLOSED_TIANCHI", "CLOSED_AREA", "VEHICLE_STOP", "PARTIAL", "UNCERTAIN"
 
 
 # ----------------------------- 抓取 -----------------------------
-def list_articles(max_pages=40):
-    """按 startTime 游标回翻政务号文章列表"""
+def list_articles(max_pages=40, stop_before=None):
+    """按 startTime 游标回翻政务号文章列表。
+
+    stop_before: 翻到比该日期更早的条目即停（增量模式用，避免每次扫全量）。
+    """
     out, cursor = [], None
+    limit = stop_before or LIST_STOP_BEFORE
     for _ in range(max_pages):
         body = {"pphId": PPH_ID, "pageNum": 1, "pageSize": 50}
         if cursor:
@@ -93,7 +98,7 @@ def list_articles(max_pages=40):
         if not d.get("hasNext") or not lst or not cursor:
             break
         try:
-            if datetime.date.fromisoformat(oldest) < LIST_STOP_BEFORE:
+            if datetime.date.fromisoformat(oldest) < limit:
                 break
         except ValueError:
             pass
@@ -180,14 +185,22 @@ def main():
     if os.path.exists(DAILIES):
         cache = json.load(open(DAILIES, encoding="utf-8"))
 
-    # 1) 列表
+    # 1) 列表：默认增量（只看最近 LOOKBACK_DAYS 天），FULL_REFRESH=true 才全量回扫
+    full = (os.environ.get("FULL_REFRESH") or "").strip().lower() == "true"
     list_ok, n_arts = False, 0
+    stop, max_pages, mode = LIST_STOP_BEFORE, 40, "full"
+    if not full and cache:
+        pubs = [v.get("pub", "")[:10] for v in cache.values() if v.get("pub")]
+        if pubs:
+            stop = datetime.date.fromisoformat(max(pubs)) - datetime.timedelta(days=LOOKBACK_DAYS)
+            max_pages, mode = 8, "incremental"
+    print(f"[mode] {mode} | stop_before={stop} | max_pages={max_pages}")
     try:
-        arts = list_articles()
+        arts = list_articles(max_pages=max_pages, stop_before=stop)
         dailies = [x for x in arts if "今日长白山" in (x.get("name") or "")]
         n_arts = len(arts)
         list_ok = True
-        print(f"[list] articles={len(arts)} dailies={len(dailies)}")
+        print(f"[list] scanned={len(arts)} dailies={len(dailies)}")
     except Exception as e:
         print(f"[list] FAILED {type(e).__name__}: {e} — 使用缓存继续", file=sys.stderr)
         dailies = []
@@ -358,8 +371,9 @@ def main():
     json.dump({
         "updated_at_cst": cst.strftime("%Y-%m-%d %H:%M:%S"),
         "latest_data_date": end.isoformat(),
+        "mode": mode,
         "list_api_ok": list_ok,
-        "list_articles": n_arts,
+        "scanned_articles": n_arts,
         "dailies_in_cache": len(cache),
         "new_details_fetched": new,
         "window_days": len(serial),
