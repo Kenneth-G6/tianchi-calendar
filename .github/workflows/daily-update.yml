@@ -1,6 +1,8 @@
 name: 每日更新 · 长白山天池逐日台账
 
 on:
+  push:
+    branches: [main]
   schedule:
     # 北京时间 18:00 = UTC 10:00
     - cron: "0 10 * * *"
@@ -52,8 +54,22 @@ jobs:
           if git diff --staged --quiet; then
             echo "无变更，跳过提交"
           else
-            git commit -m "chore(auto): 更新台账 $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M')"
+            git commit -m "chore(auto): 更新台账 $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M') [skip ci]"
             git push
+          fi
+
+      - name: 确保 Pages 站点已启用
+        run: |
+          code=$(curl -s -o /tmp/pages.json -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages" \
+            -d '{"build_type":"workflow"}')
+          echo "创建 Pages 站点返回 HTTP $code"
+          head -c 300 /tmp/pages.json; echo
+          # 409 = 已存在，属正常
+          if [ "$code" = "403" ] || [ "$code" = "404" ]; then
+            echo "::warning::自动启用 Pages 失败，需在仓库 Settings → Pages 手动选择 Source = GitHub Actions"
           fi
 
       - name: 准备 Pages 产物
