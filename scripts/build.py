@@ -346,6 +346,7 @@ def main():
         "{{HIST_FROM}}": START_DATE.isoformat(),
         "{{LATEST}}": end.isoformat(),
         "{{BUILT_AT}}": datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime("%Y-%m-%d %H:%M"),
+        "{{FETCH_STATE}}": ("官方接口正常" if list_ok else "官方接口未响应，沿用缓存数据"),
         "{{FINDINGS}}": findings,
         "{{DATA}}": payload,
     }
