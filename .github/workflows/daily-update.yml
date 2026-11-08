@@ -4,10 +4,8 @@ on:
   push:
     branches: [main]
   schedule:
-    # === 临时测试（验证 schedule 是否真能自动触发）===
-    # 北京 03:25 = UTC 19:25；03:30 = UTC 19:30 兜底
-    - cron: "25 19 * * *"
-    - cron: "30 19 * * *"
+    # 北京时间 18:00 = UTC 10:00
+    - cron: "0 10 * * *"
   workflow_dispatch:
     inputs:
       full_refresh:
