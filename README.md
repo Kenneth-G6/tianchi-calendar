@@ -2,7 +2,11 @@
 
 把「今天天池开不开」变成一条可核查的时间序列：逐日抓取「长白山发布」（澎湃号·政务，pphId 111214）的《今日长白山》公报正文，按规则判定北景区天池状态，渲染成一张三年逐日日历。
 
-**在线页面**：部署后由 GitHub Pages 提供（仓库 Settings → Pages 确认地址）。
+**在线页面**：https://kenneth-g6.github.io/tianchi-calendar/
+
+**仓库**：https://github.com/Kenneth-G6/tianchi-calendar
+
+**自动更新**：GitHub Actions 每天 UTC 10:00（北京时间 18:00）运行，结果自动提交并发布。
 
 ---
 
