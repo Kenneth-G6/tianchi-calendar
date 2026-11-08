@@ -1,11 +1,11 @@
 {
- "updated_at_cst": "2026-11-09 02:37:52",
+ "updated_at_cst": "2026-11-09 02:38:37",
  "latest_data_date": "2026-11-08",
  "mode": "incremental",
  "list_api_ok": true,
  "scanned_articles": 100,
  "dailies_in_cache": 255,
- "new_details_fetched": 1,
+ "new_details_fetched": 0,
  "window_days": 1096,
  "figures": "2026",
  "play_rate_pct": 48.2,
