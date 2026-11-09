@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>长白山北景区天池 · 逐日开放台账</title>
-<meta name="description" content="基于“长白山发布”每日《今日长白山》公报逐条解析的北景区天池开/关逐日台账，含对抗性验证与数据缺口标注。">
+<meta name="description" content="长白山北景区天池逐日开/关记录，按官方每日公报逐条解析。">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -13,277 +13,222 @@
   --vehicle:#3f6ea8;--closed:#d05450;--closedarea:#8e2020;--none:#e9eaec;
   --accent:#8e2020;
 }
-body{background:var(--bg);color:var(--ink);font:14px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1180px;margin:0 auto;padding:0 20px 80px}
-header{padding:56px 0 28px;border-bottom:1px solid var(--line);margin-bottom:32px}
-.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--accent);font-weight:600;text-transform:uppercase;margin-bottom:12px}
-h1{font-size:34px;line-height:1.25;letter-spacing:-.5px;font-weight:700;margin-bottom:14px}
-h1 small{display:block;font-size:15px;font-weight:400;color:var(--muted);letter-spacing:0;margin-top:10px;line-height:1.75}
-.badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-.badge{font-size:12px;padding:5px 11px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--muted)}
-.badge.warn{border-color:#e8c9c9;background:#fdf5f5;color:#8e2020}
-section{margin:44px 0}
-h2{font-size:20px;font-weight:700;margin-bottom:6px;letter-spacing:-.2px}
-h2 .num{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:10px;font-size:13px;font-weight:600;letter-spacing:.06em}
-.sub{color:var(--muted);font-size:13px;margin-bottom:20px;max-width:820px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
-.grid{display:grid;gap:14px}
-.kpis{grid-template-columns:repeat(3,1fr)}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
-.kpi .v{font-size:30px;font-weight:700;letter-spacing:-1px;font-variant-numeric:tabular-nums;line-height:1.2}
-.kpi .v small{font-size:14px;font-weight:500;letter-spacing:0;color:var(--muted);margin-left:3px}
-.kpi .k{font-size:12.5px;color:var(--muted);margin-top:5px}
-.kpi .d{font-size:11.5px;color:#9aa1a8;margin-top:3px}
-.accent-red .v{color:#8e2020}.accent-green .v{color:#1f9d63}.accent-blue .v{color:#3f6ea8}.accent-amber .v{color:#b8791a}
-.mbar{display:flex;flex-direction:column;gap:9px}
-.mrow{display:grid;grid-template-columns:52px 1fr 122px;align-items:center;gap:12px}
-.mlabel{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-.mtrack{height:20px;background:#eef0f2;border-radius:5px;position:relative;overflow:hidden}
-.mfill{height:100%;border-radius:5px;transition:width .4s ease}
-.mval{font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
-.mval b{color:var(--ink);font-size:13px}
-.toolbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+body{overflow-x:hidden;background:var(--bg);color:var(--ink);font:14px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px 60px}
+
+/* ---------- 顶部 ---------- */
+header{padding:32px 0 18px}
+.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:700;margin-bottom:8px}
+h1{font-size:26px;line-height:1.3;font-weight:700;letter-spacing:-.4px}
+h1 em{font-style:normal;color:var(--accent)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:12px;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.meta b{color:var(--ink);font-weight:600}
+
+/* ---------- 日历 ---------- */
+.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:20px 0 14px}
 .tabs{display:flex;gap:4px;background:#eceef1;padding:4px;border-radius:10px}
 .tab{border:0;background:transparent;padding:7px 16px;border-radius:7px;font-size:13px;color:var(--muted);cursor:pointer;font-weight:600;transition:.15s}
 .tab:hover{color:var(--ink)}
 .tab.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.legend{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
-.lg{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);cursor:pointer;padding:4px 9px;border-radius:7px;border:1px solid transparent;user-select:none}
-.lg:hover{background:#f0f2f4}
+.legend{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.lg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);cursor:pointer;padding:4px 7px;border-radius:7px;user-select:none;transition:.15s}
+.lg:hover{background:#eceef1}
 .lg.dim{opacity:.35}
-.sw{width:11px;height:11px;border-radius:3px;flex:none}
-.year-meta{font-size:12.5px;color:var(--muted);margin-bottom:16px;font-variant-numeric:tabular-nums}
-.months{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.mblock{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 12px 10px}
-.mhead{font-size:12.5px;font-weight:700;margin-bottom:7px;display:flex;justify-content:space-between;align-items:baseline}
-.dow{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:3px}
-.dow div{font-size:9.5px;color:#b6bcc2;text-align:center;letter-spacing:.04em}
-.days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cell{aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:600;cursor:pointer;position:relative;transition:transform .12s,box-shadow .12s;font-variant-numeric:tabular-nums}
-.cell:hover{transform:scale(1.22);box-shadow:0 3px 12px rgba(0,0,0,.18);z-index:5}
+.sw{width:10px;height:10px;border-radius:3px;flex:none}
+.year-meta{font-size:12.5px;color:var(--muted);margin-bottom:14px;font-variant-numeric:tabular-nums}
+
+.months{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.mblock{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 11px 10px;min-width:0}
+.mhead{font-size:12px;font-weight:700;margin-bottom:6px;color:#33383d}
+.dow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;margin-bottom:2px}
+.dow div{font-size:9px;color:#bfc4ca;text-align:center}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+.cell{min-width:0;overflow:hidden;aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:pointer;position:relative;transition:transform .12s,box-shadow .12s;font-variant-numeric:tabular-nums}
+.cell:hover{transform:scale(1.16);box-shadow:0 3px 12px rgba(0,0,0,.18);z-index:5}
 .cell.empty{cursor:default;background:transparent}
 .cell.dim{opacity:.22}
-.cell.media{outline:2px dashed rgba(142,32,32,.55);outline-offset:-2px}
-.cell.single::after{content:"";position:absolute;top:1.5px;right:1.5px;width:3.5px;height:3.5px;border-radius:50%;background:rgba(255,255,255,.92)}
-#tip{position:fixed;pointer-events:none;z-index:99;background:#16181d;color:#fff;padding:11px 13px;border-radius:9px;font-size:12px;line-height:1.6;max-width:330px;box-shadow:0 8px 28px rgba(0,0,0,.28);opacity:0;transition:opacity .12s;transform:translateY(4px)}
+.cell.media{outline:2px dashed rgba(142,32,32,.5);outline-offset:-2px}
+.cell.single::after{content:"";position:absolute;top:1.5px;right:1.5px;width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.9)}
+
+#tip{position:fixed;pointer-events:none;z-index:99;background:#16181d;color:#fff;padding:10px 12px;border-radius:9px;font-size:12px;line-height:1.6;max-width:320px;box-shadow:0 8px 28px rgba(0,0,0,.28);opacity:0;transition:opacity .12s;transform:translateY(4px)}
 #tip.on{opacity:1;transform:translateY(0)}
 #tip .td{font-weight:700;font-size:12.5px;margin-bottom:3px}
 #tip .ts{display:inline-block;font-size:11px;padding:1px 7px;border-radius:5px;margin-left:6px;vertical-align:1px}
 #tip .tr{color:#b9bfc6;font-size:11.5px;margin-top:5px}
 #tip .tg{margin-top:6px;color:#e7e9ec;font-size:11.5px;border-top:1px solid #33373d;padding-top:6px;max-height:110px;overflow:hidden}
-.rbar{display:flex;flex-direction:column;gap:11px}
-.rrow{display:grid;grid-template-columns:88px 1fr 44px;gap:12px;align-items:center}
-.rlabel{font-size:12.5px;color:#4b5259}
-.rtrack{height:16px;background:#eef0f2;border-radius:5px}
-.rfill{height:100%;border-radius:5px;background:linear-gradient(90deg,#d05450,#8e2020)}
-.rnum{font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums;color:#4b5259}
-.vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.vcard{background:#fff;border:1px solid var(--line);border-radius:13px;padding:20px}
-.vcard .tag{display:inline-block;font-size:10.5px;letter-spacing:.08em;font-weight:700;color:#8e2020;background:#fbf0f0;border-radius:5px;padding:2px 7px;margin-bottom:9px}
-.vcard h3{font-size:14.5px;margin-bottom:8px;line-height:1.45}
-.vcard p{font-size:12.8px;color:#4b5259;line-height:1.75}
-.vcard .ev{font-size:11.5px;color:#8b9298;margin-top:9px;border-left:2px solid #e3e6ea;padding-left:9px;line-height:1.65}
-.table{width:100%;border-collapse:collapse;font-size:12.8px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-.table th,.table td{padding:10px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-.table th{background:#fafbfc;font-size:11.5px;letter-spacing:.05em;color:#687078;font-weight:600;text-transform:uppercase}
+
+/* ---------- 折叠说明 ---------- */
+.hint{font-size:12px;color:#8b9298;margin-top:16px;line-height:1.8}
+details{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+summary{padding:14px 18px;font-size:13px;font-weight:600;cursor:pointer;color:#33383d;list-style:none;display:flex;align-items:center;gap:8px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸";color:var(--accent);font-size:12px;transition:transform .15s}
+details[open] summary::before{transform:rotate(90deg)}
+details[open] summary{border-bottom:1px solid var(--line)}
+.body{padding:16px 18px 20px;font-size:13px;line-height:1.85;color:#33383d}
+.body h3{font-size:13px;margin:16px 0 6px;color:#16181d}
+.body h3:first-child{margin-top:0}
+.body p{margin-bottom:9px}
+.body ul{margin:0 0 10px 17px}
+.body li{margin-bottom:4px}
+.tagline{font-size:11.5px;color:#8b9298;margin-top:14px;border-left:2px solid #e3e6ea;padding-left:10px;line-height:1.7}
+
+.table{width:100%;border-collapse:collapse;font-size:12.5px}
+.table th,.table td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.table th{font-size:11px;letter-spacing:.04em;color:#687078;font-weight:600;background:#fafbfc}
 .table tr:last-child td{border-bottom:0}
 .table td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
-.prose{font-size:13.4px;line-height:1.9;color:#33383d}
-.prose h3{font-size:14.5px;margin:20px 0 8px;color:#16181d}
-.prose p{margin-bottom:10px}
-.prose ul{margin:0 0 12px 18px}
-.prose li{margin-bottom:5px}
-.note{background:#fafbfc;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:15px 18px;font-size:12.8px;color:#4b5259;line-height:1.8}
-footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-size:12px;color:#9aa1a8;line-height:1.8}
-@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.months{grid-template-columns:repeat(2,1fr)}.vgrid{grid-template-columns:1fr}h1{font-size:26px}}
+
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.vcard{border:1px solid var(--line);border-radius:10px;padding:14px;background:#fcfcfd}
+.vcard .tag{display:inline-block;font-size:10px;letter-spacing:.06em;font-weight:700;color:#8e2020;background:#fbf0f0;border-radius:4px;padding:2px 6px;margin-bottom:7px}
+.vcard h4{font-size:13px;margin-bottom:6px;line-height:1.45}
+.vcard p{font-size:12.3px;color:#4b5259;line-height:1.7;margin-bottom:6px}
+.vcard .ev{font-size:11.5px;color:#8b9298;line-height:1.65}
+
+footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:#9aa1a8;line-height:1.85}
+
+@media(max-width:980px){.months{grid-template-columns:repeat(3,minmax(0,1fr))}.vgrid{grid-template-columns:1fr}}
+@media(max-width:640px){
+  .wrap{padding:0 12px 50px}
+  h1{font-size:21px}
+  .months{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .mblock{padding:9px 8px 7px}
+  .cell{font-size:10px;border-radius:3px}
+  .legend{margin-left:0;width:100%}
+  .tabs{width:100%;justify-content:space-between;min-width:0}
+  .tab{flex:1 1 0;min-width:0;padding:7px 4px;font-size:12px}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">数据核查报告 · 逐日台账</div>
-  <h1>长白山北景区天池「开 / 关」逐日台账
-    <small>{{RANGE}} · {{TOTAL}} 天 · 基于“长白山发布”每日《今日长白山》公报逐条解析，附对抗性验证与缺口标注</small>
-  </h1>
-  <div class="badge-row">
-    <span class="badge">口径：北景区 = 北坡（含天池主峰换乘）</span>
-    <span class="badge">逐日公报 {{NDAILY}} 篇（{{DAILY_FROM}} 起）</span>
-    <span class="badge">单篇核查 {{NSINGLE}} 篇 · 媒体公告 {{NMEDIA}} 条</span>
-    <span class="badge warn">{{WARN_BADGE}}</span>
-    <span class="badge">更新：每日 18:00（北京时间）自动运行</span>
+  <div class="eyebrow">逐日台账</div>
+  <h1>长白山北景区天池 <em>开 / 关</em></h1>
+  <div class="meta">
+    <span>{{RANGE}}</span>
+    <span><b>{{TOTAL}}</b> 天</span>
+    <span><b>{{NDAILY}}</b> 篇逐日公报</span>
+    <span>{{YR}} 年可游 <b>{{RATE}}%</b>（{{PLAY}}/{{REC}}）</span>
+    <span>更新 {{BUILT_AT}}</span>
   </div>
-  <div class="note" style="margin-top:20px">{{HEADNOTE}}</div>
 </header>
 
-<section>
-  <h2><span class="num">01</span>执行摘要</h2>
-  <p class="sub">{{EXEC_SUB}}</p>
-  <div class="grid kpis">
-    <div class="kpi accent-green"><div class="v">{{RATE}}<small>%</small></div><div class="k">可游览率（{{YR}} 年有公报日）</div><div class="d">{{PLAY}} / {{REC}} 天</div></div>
-    <div class="kpi accent-red"><div class="v">{{CLOSED}}<small>天</small></div><div class="k">天池景点关闭</div><div class="d">占公报日 {{CLOSEDPCT}}%</div></div>
-    <div class="kpi accent-red"><div class="v">{{AREA}}<small>天</small></div><div class="k">北景区整体关闭</div><div class="d">天池随之不可达</div></div>
-    <div class="kpi accent-blue"><div class="v">{{VEH}}<small>天</small></div><div class="k">仅天池车辆停运</div><div class="d">景点未明示关闭，但实际不可达</div></div>
-    <div class="kpi accent-amber"><div class="v">{{GAP}}<small>天</small></div><div class="d">公报缺口（占 {{GAPBASE}} 天的 {{GAPPCT}}%）</div></div>
-    <div class="kpi"><div class="v">{{HIST}}<small>天</small></div><div class="k">历史段已核实锚点</div><div class="d">{{HIST_NOTE}}</div></div>
-  </div>
-</section>
+<div class="toolbar">
+  <div class="tabs" id="tabs"></div>
+  <div class="legend" id="legend"></div>
+</div>
+<div class="year-meta" id="ymeta"></div>
+<div class="months" id="months"></div>
+<p class="hint">悬停看当日原文口径与出处，点击有色格子打开公报原文，点图例可高亮单一状态。<br>灰格＝该日无任何可核实的公开记录，不代表开放也不代表关闭。</p>
 
-<section>
-  <h2><span class="num">02</span>关键发现</h2>
-  <div class="card prose">{{FINDINGS}}</div>
-</section>
-
-<section>
-  <h2><span class="num">03</span>{{YR}} 年月度可游率</h2>
-  <p class="sub">分母为该月“有公报天数”，不是自然日天数——避免把信息缺口当成关闭。右侧为“可游 / 有记录”。</p>
-  <div class="card"><div class="mbar" id="mbar"></div></div>
-</section>
-
-<section>
-  <h2><span class="num">04</span>三年逐日日历</h2>
-  <p class="sub">点选年份切换；悬停查看当日原文口径与出处；点击图例可高亮单一状态；点击有色格子可打开当日公报原文。灰色＝无任何可核实记录。</p>
-  <div class="toolbar">
-    <div class="tabs" id="tabs"></div>
-    <div class="legend" id="legend"></div>
-  </div>
-  <div class="year-meta" id="ymeta"></div>
-  <div class="months" id="months"></div>
-</section>
-
-<section>
-  <h2><span class="num">05</span>关闭成因</h2>
-  <p class="sub">一条公报可同时命中多个成因（例：大风＋降雪＋结冰），故合计大于关闭天数。数据仅取自 {{YR}} 年有公报且判定为“不可游”的日期。</p>
-  <div class="card"><div class="rbar" id="rbar"></div>
-    <div style="font-size:11.5px;color:#8b9298;margin-top:16px;border-top:1px solid #eef0f2;padding-top:12px;line-height:1.7">
-      方法局限：成因由“北景区段落”关键词提取。若同一段并列了其他景点的关闭原因（如“小天池景点关闭，原因：基础设施维修改造”），其成因会被一并计入，故“设施维修”一项包含非天池景点的维修，计数仅供量级参考，不宜作为天池的单独成因。
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2><span class="num">06</span>对抗性验证</h2>
-  <p class="sub">以下九项是针对“这份统计可能在哪些地方骗人”的自查。第 1 项曾把开放率从 48.2% 误算成 24.2%，是本报告最重要的一次纠错。</p>
-  <div class="vgrid">
-
-    <div class="vcard">
-      <div class="tag">口径陷阱 · 已纠正</div>
-      <h3>“视天气情况随时关闭”是套话，不是关闭</h3>
-      <p>公报固定句式“……正常开放，视天气情况随时关闭”。初版解析器把“关闭”二字当作关闭信号，导致 121 个“正常开放”的日期被误判为天池关闭，2026 年可游率从 48.2% 被压到 24.2%，1—3 月甚至显示 0%。</p>
-      <div class="ev">纠错方式：判定前先剥离 6 种固定套话（视天气情况随时关闭 / 随时停运 / 视天气情况随时开放 等），再匹配关闭动词。纠错后 1 月 17.6%、3 月 44.0%、6 月 82.8%，与气候常识一致。</div>
-    </div>
-
-    <div class="vcard">
-      <div class="tag">口径陷阱 · 保留分歧</div>
-      <h3>“天池车辆停运” ≠ “天池景点关闭”</h3>
-      <p>{{VEH}} 天的公报只写“天池车辆全天停运”，未写景点关闭。严格按字面，景点状态是“未明示”；但北坡上主峰只能乘景区车，车停运即到不了天池观景台。</p>
-      <div class="ev">本报告采用“游客可达”口径，将其计入不可游，并单列为一类（图中蓝色），不与“景点关闭”混算。若改用字面口径，可游率会虚高约 4 个百分点。</div>
-    </div>
-
-    <div class="vcard">
-      <div class="tag">口径陷阱 · 已处理</div>
-      <h3>“北景区全天关闭”时，公报不会说天池关闭</h3>
-      <p>{{AREA}} 天的公报形式是“北景区不具备安全运营条件，全天暂停开放，原因如下：1.天池…；2.瀑布…”。此时天池必然不可游，但正文没有“天池景点关闭”字样，按关键词匹配会全部漏判。</p>
-      <div class="ev">处理：先识别“北（、西）景区 + 全天关闭/停运/暂停开放”的整景区口径，且要求该句主干不含“天池景点”，避免把“北景区天池景点全天关闭”错归为整景区关闭。</div>
-    </div>
-
-    <div class="vcard">
-      <div class="tag">口径陷阱 · 部分可游</div>
-      <h3>中途停检与延迟开放，不能二分开/关</h3>
-      <p>部分日期出现“天池 9:00 停止检票”“北景区 10:00 停止检票”，另有“天池景点 10:30 开始检票运营”“是否开放视清雪进度确定”。这些日子既非全天开放也非全天关闭。</p>
-      <div class="ev">处理：单列 PARTIAL（中途停检，橙色）与 UNCERTAIN（待定，灰蓝）；延迟开放计入可游但在提示中标明。若强行二分，会分别高估或低估。</div>
-    </div>
-
-    <div class="vcard">
-      <div class="tag">来源偏差 · 关键</div>
-      <h3>用媒体报道补历史，会系统性高估“关闭率”</h3>
-      <p>“天池关闭”是新闻，“天池正常开放”不是新闻。媒体只转载关闭公告：本报告收录的 {{NMEDIA}} 条媒体记录<b>全部是关闭</b>；而 {{NSINGLE}} 条单篇核查的公报中有一部分是开放日。</p>
-      <div class="ev">结论：历史段的媒体记录只能证明“这些天确实关了”，不能反推关闭频率。这就是历史段不给开放率的原因。</div>
-    </div>
-
-    <div class="vcard">
-      <div class="tag">时间维度 · 一日多变</div>
-      <h3>“早间口径”不等于“全天实况”</h3>
-      <p>2024-02-12：早 7 时公告“北景区天池景点全天关闭”，中午再发公告升级为“北景区全天关闭”。2025-05-01：7:23 发天池关闭，10:46 与 11:12 又连发两次停止检票公告。</p>
-      <div class="ev">公报在 6:20–8:30 间发布，反映的是“山门开放前”的状态；当日天气恶化后的二次公告不会进入日报。日历记录的是<b>早间初始口径</b>。</div>
-    </div>
-
-    <div class="vcard">
-      <div class="tag">内部一致性 · 已核</div>
-      <h3>同日多篇与标题日期偏差</h3>
-      <p>抓取到的公报中若同日存在 2 篇，取较晚发布者；全部公报的“标题日期”与“发布日期”偏差经核为 0 天，未出现跨年错位。</p>
-      <div class="ev">校验方式：逐条比较标题中的“M月D日”与 publishTime 的年月日，偏差天数非 0 即报警。</div>
-    </div>
-
-    <div class="vcard">
-      <div class="tag">覆盖完整性 · 保留缺陷</div>
-      <h3>公报缺口与政务号存档上限</h3>
-      <p>澎湃政务号接口按时间游标翻页，累计约 1,184 篇后即 hasNext=false，最早只到 {{DAILY_FROM}}；直接指定更早年份的游标一律返回 0 条。该号在澎湃的存档被服务端限制在最近约 10 个月。</p>
-      <div class="ev">已验证不可行：澎湃搜索接口 404、政务号时间线接口 total=null、搜狐号主页无分页 API、搜狗微信反爬、Google/Bing 对本站点零索引。故历史段以“点状锚定 + 灰色留空”交付。</div>
-    </div>
-
-    <div class="vcard">
-      <div class="tag">来源独立性 · 最需警惕</div>
-      <h3>所谓“多源交叉”，其实是“一源多播”</h3>
-      <p>央视网、光明网、环球网、中国吉林网、城市晚报、腾讯新闻转载的每一条天池关闭消息，正文都注明“来源：长白山”或“转自：长白山”，即长白山景区管理公司公告的复制。它们不是对事实的独立核实，而是同一份稿件在不同渠道的重复投放。</p>
-      <div class="ev">后果：把这类报道当作“多家媒体证实”是虚假的交叉验证。真正的独立证据只有两类——气象台的风速/降雪记录，以及游客实拍与景区退票数据。本报告只能确认“公告原文一致”，不能确认“事实被第三方独立复核”。</div>
-    </div>
-
-  </div>
-</section>
-
-<section>
-  <h2><span class="num">07</span>历史段锚点清单</h2>
-  <p class="sub">这 {{HIST}} 天是本报告能逐条核到原文的全部历史记录（{{HIST_FROM}} 至 {{DAILY_FROM}} 前）。它们不构成连续序列，只作为“最低确认事实”。</p>
-  <table class="table" id="histtable">
-    <thead><tr><th>日期</th><th>状态</th><th>官方口径要点</th><th>来源</th></tr></thead>
-    <tbody></tbody>
-  </table>
-</section>
-
-<section>
-  <h2><span class="num">08</span>方法与口径</h2>
-  <div class="card prose">
-    <h3>数据源</h3>
-    <p>唯一权威逐日来源为「长白山发布」（澎湃号·政务，pphId=111214，认证主体：长白山保护开发区融媒体中心）每日发布的《今日长白山（X月X日）》。正文固定以“X月X日长白山北景区：……”开头，由长白山集团在山门开放前（约 6:20–8:30）提供，是当日天池开闭的第一手口径。</p>
-    <p>抓取方式：澎湃内容接口按 startTime 游标回翻，筛出标题含“今日长白山”的文章逐篇取正文。另以单篇公报与媒体公告（央视网、光明网、环球网、中国吉林网、城市晚报、腾讯新闻、海报新闻等）做交叉锚定。</p>
-    <h3>状态定义</h3>
+<details>
+  <summary>口径与数据缺口（为什么只有 {{YR}} 年能算开放率）</summary>
+  <div class="body">
+    <p>唯一权威逐日来源是「长白山发布」（澎湃号·政务，认证主体：长白山保护开发区融媒体中心）每天早晨 6:20–8:30 发布的《今日长白山》公报，正文以「X月X日长白山北景区：……」开头，是当日天池开闭的第一手口径。</p>
+    <h3>八种状态的定义</h3>
     <ul>
-      <li><b>可游（绿）</b>：公报明示天池正常开放。</li>
-      <li><b>延迟/限时开放（浅绿）</b>：明示“X 点开始检票”“延缓 N 分钟开放”。</li>
-      <li><b>中途停检（橙）</b>：明示“X 点停止检票”，当日部分时段可游。</li>
-      <li><b>天池关闭（红）</b>：明示天池景点全天关闭/暂停游览。</li>
-      <li><b>景区关闭（深红）</b>：北景区整体全天关闭/暂停开放/停运。</li>
-      <li><b>车辆停运（蓝）</b>：仅天池车辆停运，景点未明示关闭（游客实际不可达）。</li>
-      <li><b>待定（灰蓝）</b>：公报称“是否开放视清雪进度确定”。</li>
-      <li><b>无记录（灰）</b>：当日无任何可核实的公开口径。</li>
+      <li><b>正常开放（深绿）</b>：明示天池正常开放。</li>
+      <li><b>延迟/限时开放（浅绿）</b>：明示「X 点开始检票」「延缓 N 分钟开放」。</li>
+      <li><b>中途停检（橙）</b>：明示「X 点停止检票」，当日部分时段可游。</li>
+      <li><b>天池关闭（红）</b>：明示天池景点全天关闭或暂停游览。</li>
+      <li><b>景区关闭（深红）</b>：北景区整体全天关闭、停运或暂停开放。</li>
+      <li><b>车辆停运（蓝）</b>：仅天池车辆停运、景点未明示关闭。北坡上主峰只能乘景区车，车停即到不了，故计入不可游。</li>
+      <li><b>待定（灰蓝）</b>：公报称「是否开放视清雪进度确定」。</li>
+      <li><b>无记录（灰）</b>：当日无任何可核实口径，不插值。</li>
     </ul>
-    <h3>制度背景</h3>
-    <p>长白山北、西景区全年开放、无休息日；南景区季节性开放（约 5 月中旬开、10 月中旬闭）。天池因瞬时大风、极寒冰冻、强降雨、暴风雪、大雾等不具备安全条件时关闭；北景区天池主峰车票 80 元，当日 24 点前可退。“全天关闭”与“暂停游览/车辆停运/中途停检”是四种不同口径，混用会直接改变统计结论。</p>
-  </div>
-</section>
-
-<section>
-  <h2><span class="num">09</span>不确定性、争议与适用边界</h2>
-  <div class="card prose">
-    <h3>这份统计不能回答什么</h3>
+    <h3>为什么历史段不给开放率</h3>
+    <p>澎湃政务号按时间游标翻页，累计约 1,184 篇后接口即返回 <code>hasNext=false</code>，最早只到 {{DAILY_FROM}}。指定更早游标一律返回 0 条——该号在澎湃的存档被服务端限制在最近约 10 个月。</p>
+    <p>{{DAILY_FROM}} 之前只用单篇公报与媒体公告做「点状锚定」，共 {{HIST}} 天，列在下方。分母不可知时算出的比率是伪精度，所以那段一律留灰。</p>
+    <h3>这份数据不能回答什么</h3>
     <ul>
-      <li><b>不能给出 {{HIST_FROM}} 至 {{DAILY_FROM}} 的开放率。</b>历史段没有连续分母，任何“三年平均开放率”的说法都是编造。</li>
-      <li><b>不能代表 {{YR}} 年以外的年份。</b>单年样本，年度间降雪节奏差异可能显著。</li>
-      <li><b>不能反映“当天午后”的实况。</b>公报是早间初始口径，午后天气恶化导致的临时关闭不在其中。</li>
-      <li><b>不能等同于“能不能看到天池”。</b>天池景点开放 ≠ 能看到湖面：云雾、雨雪会遮挡视线，但公报不记录能见度对观景的影响。</li>
+      <li>不能给 {{HIST_FROM}} 至 {{DAILY_FROM}} 的开放率。</li>
+      <li>不能代表其他年份——单年样本，年度间降雪节奏差异可能显著。</li>
+      <li>不能反映当天午后的实况。公报是早间初始口径，午后天气恶化后的二次公告不进入日报。</li>
+      <li>不等于「能不能看到天池」：景点开放 ≠ 湖面可见，云雾遮挡不记录。</li>
     </ul>
-    <h3>主要争议点</h3>
-    <p>① “天池车辆停运”是否应算关闭——本报告取游客可达口径，与字面口径存在数个百分点差异。② 公报缺口是否可插值——本报告坚持不插值，缺口保持灰色。③ 春季可游率低于冬季，与“回暖”直觉冲突，需 2–3 年同期数据才能确认是否稳定规律。</p>
-    <h3>适用建议</h3>
-    <p>若用于行程决策：把 6 月中旬—9 月下旬视为高概率窗口，10 月起迅速衰减，2 月与 4 月是全年的两个低谷。若用于研究或报道：只能引用 {{YR}} 年逐日结论，历史段仅可引用“某日确已关闭”这一事实。</p>
   </div>
-</section>
+</details>
+
+<details>
+  <summary>九项对抗性验证（这份统计可能在哪里骗人）</summary>
+  <div class="body">
+    <div class="vgrid">
+      <div class="vcard">
+        <div class="tag">口径陷阱 · 已纠正</div>
+        <h4>「视天气情况随时关闭」是套话，不是关闭</h4>
+        <p>公报固定句式「……正常开放，视天气情况随时关闭」。初版解析器把「关闭」二字当成关闭信号，导致 121 个正常开放日被误判，2026 年可游率从 48.2% 被压到 24.2%。</p>
+        <div class="ev">纠错：判定前先剥离 6 种固定套话，再匹配关闭动词。纠错后月度曲线与气候常识一致。</div>
+      </div>
+      <div class="vcard">
+        <div class="tag">来源偏差 · 关键</div>
+        <h4>用媒体补历史，会系统性高估关闭率</h4>
+        <p>「天池关闭」是新闻，「正常开放」不是新闻。收录的媒体记录全部是关闭，而单篇核查的公报里有相当一部分是开放日。</p>
+        <div class="ev">媒体只能证明「这些天确实关了」，不能反推关闭频率。</div>
+      </div>
+      <div class="vcard">
+        <div class="tag">来源独立性 · 最需警惕</div>
+        <h4>「多源交叉」其实是「一源多播」</h4>
+        <p>央视网、光明网、环球网、中国吉林网等转载的每条关闭消息，正文都注明「来源：长白山」——同一份公告的复制，不是独立核实。</p>
+        <div class="ev">把这类报道当作「多家媒体证实」是虚假交叉验证。</div>
+      </div>
+      <div class="vcard">
+        <div class="tag">口径陷阱 · 保留分歧</div>
+        <h4>「车辆停运」≠「景点关闭」</h4>
+        <p>部分日期只写车辆停运、未写景点关闭。按字面是「未明示」，按游客可达即「去不了」。</p>
+        <div class="ev">本报告取游客可达口径并单列一类（蓝），不与景点关闭混算。</div>
+      </div>
+      <div class="vcard">
+        <div class="tag">时间维度 · 一日多变</div>
+        <h4>早间口径 ≠ 全天实况</h4>
+        <p>2024-02-12 早 7 时公告天池关闭，中午升级为北景区全天关闭；2025-05-01 当天连发三次公告。</p>
+        <div class="ev">日历记录的是山门开放前的初始口径。</div>
+      </div>
+      <div class="vcard">
+        <div class="tag">覆盖完整性 · 保留缺陷</div>
+        <h4>公报缺口保持留白</h4>
+        <p>部分日期该号确实没有发布日报（如国庆 10/3–10/5 连续缺档），经核对全量列表确认是「未发布」而非「漏抓」。</p>
+        <div class="ev">缺口不插值，一律留灰。</div>
+      </div>
+      <div class="vcard">
+        <div class="tag">口径陷阱 · 部分可游</div>
+        <h4>中途停检与延迟开放不能二分</h4>
+        <p>「X 点停止检票」「X 点开始检票」「视清雪进度确定」三类既非全开也非全关。</p>
+        <div class="ev">单列橙、浅绿、灰蓝三色，不强行二分。</div>
+      </div>
+      <div class="vcard">
+        <div class="tag">内部一致性 · 已核</div>
+        <h4>标题日期与发布日期零偏差</h4>
+        <p>逐条比对标题中的「M月D日」与发布时间，偏差天数全部为 0；同日多篇取较晚发布者，未发现状态冲突。</p>
+        <div class="ev">排除跨年错位导致的日期串行。</div>
+      </div>
+      <div class="vcard">
+        <div class="tag">口径陷阱 · 已处理</div>
+        <h4>整景区关闭时公报不提天池关闭</h4>
+        <p>部分日期形式是「北景区不具备安全运营条件，全天暂停开放，原因如下：1.天池…」，正文没有「天池景点关闭」字样，纯关键词会全部漏判。</p>
+        <div class="ev">先识别整景区口径，再排除「北景区天池景点关闭」误归。</div>
+      </div>
+    </div>
+    <div class="tagline">以上第 1 项曾把 2026 年可游率从 48.2% 误算成 24.2%，是本报告最重要的一次纠错。</div>
+  </div>
+</details>
+
+<details>
+  <summary>历史段 {{HIST}} 天已核实锚点（{{HIST_FROM}} 至 {{DAILY_FROM}}）</summary>
+  <div class="body" style="padding:0">
+    <table class="table" id="histtable">
+      <thead><tr><th>日期</th><th>状态</th><th>官方口径要点</th><th>来源</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</details>
 
 <footer>
-  数据截止 {{LATEST}} ｜ 最后构建 {{BUILT_AT}} ｜ 本次抓取 {{FETCH_STATE}} ｜ 共 {{TOTAL}} 天、{{NDAILY}} 篇官方逐日公报、{{NSINGLE}} 篇单篇核查、{{NMEDIA}} 条媒体公告 ｜ 时区 UTC+8<br>
-  逐日公报来源：长白山发布（澎湃号·政务，pphId 111214）。媒体公告来源：央视网、光明网、环球网、中国吉林网、城市晚报、腾讯新闻、海报新闻/极目新闻。<br>
-  本报告所有灰色格子均为“无公开可核实记录”，不代表当日开放或关闭。｜ 本页由 GitHub Actions 每日 18:00（北京时间）自动重建。
+  数据截至 {{LATEST}} ｜ 最后构建 {{BUILT_AT}} ｜ 本次抓取 {{FETCH_STATE}}<br>
+  逐日公报：长白山发布（澎湃号·政务，pphId 111214）｜ 媒体公告：央视网、光明网、环球网、中国吉林网、城市晚报、海报新闻等<br>
+  页面由 GitHub Actions 每日 18:00（北京时间）自动重建 ｜ 公报原文版权归长白山保护开发区融媒体中心
 </footer>
 
 </div>
@@ -291,7 +236,6 @@ footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-si
 
 <script>
 const DATA = {{DATA}};
-const S = DATA.stats;
 const DAYS = DATA.days;
 
 const SPEC = {
@@ -305,34 +249,6 @@ const SPEC = {
   NO_RECORD:{c:'var(--none)',n:'无公开记录',t:'信息真空'}
 };
 const ORDER = ['OPEN','OPEN_DELAY','PARTIAL','UNCERTAIN','VEHICLE_STOP','CLOSED_TIANCHI','CLOSED_AREA','NO_RECORD'];
-
-(function(){
-  const el = document.getElementById('mbar');
-  let h = '';
-  const ks = Object.keys(S.month).sort((a,b)=>+a-+b);
-  for (const m of ks){
-    const d = S.month[m];
-    if(!d || d.rec===0) continue;
-    const rate = d.rate===null?0:d.rate;
-    const col = rate>=75?'#1f9d63':rate>=45?'#e0a020':rate>=20?'#c96b5a':'#8e2020';
-    h += `<div class="mrow">
-      <div class="mlabel">${m} 月</div>
-      <div class="mtrack"><div class="mfill" style="width:${Math.max(rate,1.5)}%;background:${col}"></div></div>
-      <div class="mval"><b>${d.rate===null?'—':d.rate+'%'}</b> · ${d.play}/${d.rec}</div>
-    </div>`;
-  }
-  el.innerHTML = h;
-})();
-
-(function(){
-  const el = document.getElementById('rbar');
-  const arr = Object.entries(S.reason).sort((a,b)=>b[1]-a[1]);
-  const max = arr.length?arr[0][1]:1;
-  el.innerHTML = arr.map(([k,v])=>`<div class="rrow">
-    <div class="rlabel">${k}</div>
-    <div class="rtrack"><div class="rfill" style="width:${v/max*100}%"></div></div>
-    <div class="rnum">${v}</div></div>`).join('');
-})();
 
 let active = null;
 (function(){
@@ -370,8 +286,7 @@ let curYear = +YEARS[YEARS.length-1];
 
 function render(year){
   const el = document.getElementById('months');
-  let html = '';
-  let rec=0, tot=0, play=0;
+  let html = '', rec=0, tot=0, play=0;
   for (let m=1;m<=12;m++){
     const first = new Date(year, m-1, 1);
     const lastDay = new Date(year, m, 0).getDate();
@@ -388,18 +303,18 @@ function render(year){
       if(it.lv==='media') cls.push('media');
       if(it.lv==='single') cls.push('single');
       const bg = SPEC[it.s].c;
-      const fg = (it.s==='NO_RECORD')?'#a9b0b6':'#fff';
+      const fg = (it.s==='NO_RECORD')?'#b4b9be':'#fff';
       cells.push(`<div class="${cls.join(' ')}" data-s="${it.s}" data-k="${key}" style="background:${bg};color:${fg}">${d}</div>`);
     }
     html += `<div class="mblock">
-      <div class="mhead">${m} 月 <span></span></div>
+      <div class="mhead">${m} 月</div>
       <div class="dow">${DOW.map(x=>`<div>${x}</div>`).join('')}</div>
       <div class="days">${cells.join('')}</div>
     </div>`;
   }
   el.innerHTML = html;
   document.getElementById('ymeta').textContent =
-    `${year} 年：有记录 ${rec} 天 / 共 ${tot} 天，其中可游 ${play} 天` + (rec?`（占有记录 ${(play/rec*100).toFixed(1)}%）`:'');
+    `${year} 年：有记录 ${rec} / ${tot} 天，可游 ${play} 天` + (rec?`（占有记录 ${(play/rec*100).toFixed(1)}%）`:'');
   bindTip();
 }
 
@@ -409,17 +324,17 @@ function bindTip(){
     c.onmouseenter = e=>{
       const it = map[c.dataset.k];
       const sp = SPEC[it.s];
-      const d = new Date(it.d);
-      const wd = '日一二三四五六'[d.getDay()];
+      const dt = new Date(it.d);
+      const wd = '日一二三四五六'[dt.getDay()];
       let h = `<div class="td">${it.d.replace(/-/g,'.')} 周${wd}<span class="ts" style="background:${sp.c};color:#fff">${sp.n}</span></div>`;
       h += `<div style="color:#b9bfc6;font-size:11.5px">${sp.t}${it.r&&it.r.length?' · 成因：'+it.r.join('、'):''}</div>`;
       if(it.g) h += `<div class="tg">${it.g}</div>`;
       if(it.n && it.lv==='media') h += `<div class="tg">媒体口径：${it.n}<br><span style="color:#8b9298">${it.ns||''}</span></div>`;
       h += `<div class="tr">${it.src||'—'}${it.t?' · '+it.t:''}</div>`;
       tip.innerHTML = h; tip.classList.add('on');
-      const x = Math.min(e.clientX+16, window.innerWidth-350);
-      const y = Math.min(e.clientY+16, window.innerHeight-230);
-      tip.style.left = x+'px'; tip.style.top = y+'px';
+      const x = Math.min(e.clientX+14, window.innerWidth-330);
+      const y = Math.min(e.clientY+14, window.innerHeight-220);
+      tip.style.left = Math.max(8,x)+'px'; tip.style.top = Math.max(8,y)+'px';
     };
     c.onmouseleave = ()=>tip.classList.remove('on');
     c.onclick = ()=>{
@@ -429,27 +344,19 @@ function bindTip(){
   });
 }
 
-document.getElementById('tabs').querySelectorAll('.tab').forEach(t=>{
-  t.onclick = ()=>{
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
-    t.classList.add('on');
-    curYear = +t.dataset.y;
-    render(curYear);
-  };
-});
-
-(function(){
+function fillHist(){
   const tb = document.querySelector('#histtable tbody');
   const rows = DAYS.filter(d=>d.lv!=='daily' && d.s!=='NO_RECORD').sort((a,b)=>a.d<b.d?-1:1);
   tb.innerHTML = rows.map(d=>{
     const sp = SPEC[d.s];
     const note = d.n || d.w;
     return `<tr><td class="n">${d.d}</td>
-      <td><span style="display:inline-block;padding:2px 8px;border-radius:5px;background:${sp.c};color:#fff;font-size:11.5px">${sp.n}</span></td>
+      <td><span style="display:inline-block;padding:2px 7px;border-radius:5px;background:${sp.c};color:#fff;font-size:11px;white-space:nowrap">${sp.n}</span></td>
       <td>${note}</td><td style="color:#8b9298">${d.ns||d.src}</td></tr>`;
   }).join('');
-})();
+}
 
+fillHist();
 render(curYear);
 </script>
 </body>
