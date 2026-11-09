@@ -88,11 +88,43 @@ details[open] summary{border-bottom:1px solid var(--line)}
 
 footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:#9aa1a8;line-height:1.85}
 
-@media(max-width:980px){.months{grid-template-columns:repeat(3,minmax(0,1fr))}.vgrid{grid-template-columns:1fr}}
+
+/* ---------- 三坡攻略 ---------- */
+.sec{font-size:19px;font-weight:700;margin:38px 0 4px;letter-spacing:-.2px}
+.sec-sub{font-size:12.5px;color:#8b9298;margin-bottom:14px;line-height:1.7}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:16px}
+.cmp{width:100%;min-width:680px;border-collapse:collapse;font-size:12.5px;table-layout:fixed}
+.cmp th,.cmp td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
+.cmp th{font-size:11.5px;background:#fafbfc;color:#33383d;font-weight:700;white-space:nowrap}
+.cmp th:first-child,.cmp td:first-child{color:#8b9298;font-size:11.5px;white-space:nowrap;width:100px}
+.cmp tr:last-child td{border-bottom:0}
+.cmp td b{color:var(--accent);font-weight:600}
+.slopes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.slope{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px 15px 13px;border-top:3px solid #ccc;min-width:0}
+.slope.n{border-top-color:var(--open)}
+.slope.w{border-top-color:var(--partial)}
+.slope.s{border-top-color:var(--vehicle)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 9px}
+.chips span{font-size:10.5px;background:#f2f4f6;color:#4b5259;padding:2px 7px;border-radius:5px;line-height:1.55;white-space:nowrap}
+.slope h4{font-size:14.5px;margin-bottom:4px}
+.slope .who{font-size:11.5px;color:#8b9298;margin-bottom:11px;line-height:1.6}
+.slope dt{font-size:10.5px;color:#9aa1a8;letter-spacing:.05em;margin-top:10px}
+.slope dd{font-size:12.3px;line-height:1.7;color:#33383d;margin-top:2px}
+.slope .warn{margin-top:11px;padding-top:9px;border-top:1px dashed var(--line);font-size:11.8px;color:#8e2020;line-height:1.68}
+.rules{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px 18px 16px}
+.rules li{list-style:none;font-size:12.5px;line-height:1.8;padding-left:16px;position:relative;margin-bottom:7px;color:#33383d}
+.rules li::before{content:"·";position:absolute;left:4px;color:var(--accent);font-weight:700}
+.rules li:last-child{margin-bottom:0}
+.rules b{color:#16181d}
+.src{font-size:11px;color:#a3a9b0;margin-top:10px;line-height:1.7}
+
+@media(max-width:980px){.months{grid-template-columns:repeat(3,minmax(0,1fr))}.vgrid{grid-template-columns:1fr}.slopes{grid-template-columns:1fr}}
 @media(max-width:640px){
   .wrap{padding:0 12px 50px}
   h1{font-size:21px}
   .months{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .tblwrap{display:none}
+  .slopes{gap:10px}
   .mblock{padding:9px 8px 7px}
   .cell{font-size:10px;border-radius:3px}
   .legend{margin-left:0;width:100%}
@@ -112,7 +144,7 @@ footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-si
     <span><b>1,096</b> 天</span>
     <span><b>253</b> 篇逐日公报</span>
     <span>2026 年可游 <b>48.2%</b>（122/253）</span>
-    <span>更新 2026-11-09 09:20</span>
+    <span>更新 2026-11-09 09:36</span>
   </div>
 </header>
 
@@ -124,109 +156,75 @@ footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-si
 <div class="months" id="months"></div>
 <p class="hint">悬停看当日原文口径与出处，点击有色格子打开公报原文，点图例可高亮单一状态。<br>灰格＝该日无任何可核实的公开记录，不代表开放也不代表关闭。</p>
 
-<details>
-  <summary>口径与数据缺口（为什么只有 2026 年能算开放率）</summary>
-  <div class="body">
-    <p>唯一权威逐日来源是「长白山发布」（澎湃号·政务，认证主体：长白山保护开发区融媒体中心）每天早晨 6:20–8:30 发布的《今日长白山》公报，正文以「X月X日长白山北景区：……」开头，是当日天池开闭的第一手口径。</p>
-    <h3>八种状态的定义</h3>
-    <ul>
-      <li><b>正常开放（深绿）</b>：明示天池正常开放。</li>
-      <li><b>延迟/限时开放（浅绿）</b>：明示「X 点开始检票」「延缓 N 分钟开放」。</li>
-      <li><b>中途停检（橙）</b>：明示「X 点停止检票」，当日部分时段可游。</li>
-      <li><b>天池关闭（红）</b>：明示天池景点全天关闭或暂停游览。</li>
-      <li><b>景区关闭（深红）</b>：北景区整体全天关闭、停运或暂停开放。</li>
-      <li><b>车辆停运（蓝）</b>：仅天池车辆停运、景点未明示关闭。北坡上主峰只能乘景区车，车停即到不了，故计入不可游。</li>
-      <li><b>待定（灰蓝）</b>：公报称「是否开放视清雪进度确定」。</li>
-      <li><b>无记录（灰）</b>：当日无任何可核实口径，不插值。</li>
-    </ul>
-    <h3>为什么历史段不给开放率</h3>
-    <p>澎湃政务号按时间游标翻页，累计约 1,184 篇后接口即返回 <code>hasNext=false</code>，最早只到 2026-01-15。指定更早游标一律返回 0 条——该号在澎湃的存档被服务端限制在最近约 10 个月。</p>
-    <p>2026-01-15 之前只用单篇公报与媒体公告做「点状锚定」，共 25 天，列在下方。分母不可知时算出的比率是伪精度，所以那段一律留灰。</p>
-    <h3>这份数据不能回答什么</h3>
-    <ul>
-      <li>不能给 2023-11-09 至 2026-01-15 的开放率。</li>
-      <li>不能代表其他年份——单年样本，年度间降雪节奏差异可能显著。</li>
-      <li>不能反映当天午后的实况。公报是早间初始口径，午后天气恶化后的二次公告不进入日报。</li>
-      <li>不等于「能不能看到天池」：景点开放 ≠ 湖面可见，云雾遮挡不记录。</li>
-    </ul>
-  </div>
-</details>
+<h2 class="sec">三坡怎么选</h2>
+<p class="sec-sub">北、西、南三个景区互不连通，入口相距几十到一百多公里，一天只能玩一个坡。三坡都是同一个天池，差别在到达方式、视野和配套。</p>
 
-<details>
-  <summary>九项对抗性验证（这份统计可能在哪里骗人）</summary>
-  <div class="body">
-    <div class="vgrid">
-      <div class="vcard">
-        <div class="tag">口径陷阱 · 已纠正</div>
-        <h4>「视天气情况随时关闭」是套话，不是关闭</h4>
-        <p>公报固定句式「……正常开放，视天气情况随时关闭」。初版解析器把「关闭」二字当成关闭信号，导致 121 个正常开放日被误判，2026 年可游率从 48.2% 被压到 24.2%。</p>
-        <div class="ev">纠错：判定前先剥离 6 种固定套话，再匹配关闭动词。纠错后月度曲线与气候常识一致。</div>
-      </div>
-      <div class="vcard">
-        <div class="tag">来源偏差 · 关键</div>
-        <h4>用媒体补历史，会系统性高估关闭率</h4>
-        <p>「天池关闭」是新闻，「正常开放」不是新闻。收录的媒体记录全部是关闭，而单篇核查的公报里有相当一部分是开放日。</p>
-        <div class="ev">媒体只能证明「这些天确实关了」，不能反推关闭频率。</div>
-      </div>
-      <div class="vcard">
-        <div class="tag">来源独立性 · 最需警惕</div>
-        <h4>「多源交叉」其实是「一源多播」</h4>
-        <p>央视网、光明网、环球网、中国吉林网等转载的每条关闭消息，正文都注明「来源：长白山」——同一份公告的复制，不是独立核实。</p>
-        <div class="ev">把这类报道当作「多家媒体证实」是虚假交叉验证。</div>
-      </div>
-      <div class="vcard">
-        <div class="tag">口径陷阱 · 保留分歧</div>
-        <h4>「车辆停运」≠「景点关闭」</h4>
-        <p>部分日期只写车辆停运、未写景点关闭。按字面是「未明示」，按游客可达即「去不了」。</p>
-        <div class="ev">本报告取游客可达口径并单列一类（蓝），不与景点关闭混算。</div>
-      </div>
-      <div class="vcard">
-        <div class="tag">时间维度 · 一日多变</div>
-        <h4>早间口径 ≠ 全天实况</h4>
-        <p>2024-02-12 早 7 时公告天池关闭，中午升级为北景区全天关闭；2025-05-01 当天连发三次公告。</p>
-        <div class="ev">日历记录的是山门开放前的初始口径。</div>
-      </div>
-      <div class="vcard">
-        <div class="tag">覆盖完整性 · 保留缺陷</div>
-        <h4>公报缺口保持留白</h4>
-        <p>部分日期该号确实没有发布日报（如国庆 10/3–10/5 连续缺档），经核对全量列表确认是「未发布」而非「漏抓」。</p>
-        <div class="ev">缺口不插值，一律留灰。</div>
-      </div>
-      <div class="vcard">
-        <div class="tag">口径陷阱 · 部分可游</div>
-        <h4>中途停检与延迟开放不能二分</h4>
-        <p>「X 点停止检票」「X 点开始检票」「视清雪进度确定」三类既非全开也非全关。</p>
-        <div class="ev">单列橙、浅绿、灰蓝三色，不强行二分。</div>
-      </div>
-      <div class="vcard">
-        <div class="tag">内部一致性 · 已核</div>
-        <h4>标题日期与发布日期零偏差</h4>
-        <p>逐条比对标题中的「M月D日」与发布时间，偏差天数全部为 0；同日多篇取较晚发布者，未发现状态冲突。</p>
-        <div class="ev">排除跨年错位导致的日期串行。</div>
-      </div>
-      <div class="vcard">
-        <div class="tag">口径陷阱 · 已处理</div>
-        <h4>整景区关闭时公报不提天池关闭</h4>
-        <p>部分日期形式是「北景区不具备安全运营条件，全天暂停开放，原因如下：1.天池…」，正文没有「天池景点关闭」字样，纯关键词会全部漏判。</p>
-        <div class="ev">先识别整景区口径，再排除「北景区天池景点关闭」误归。</div>
-      </div>
-    </div>
-    <div class="tagline">以上第 1 项曾把 2026 年可游率从 48.2% 误算成 24.2%，是本报告最重要的一次纠错。</div>
-  </div>
-</details>
+<div class="tblwrap">
+<table class="cmp">
+<thead><tr><th></th><th>北景区 · 北坡</th><th>西景区 · 西坡</th><th>南景区 · 南坡</th></tr></thead>
+<tbody>
+<tr><td>入口</td><td>二道白河镇（池北）</td><td>松江河镇（池西）</td><td>长白县（池南）</td></tr>
+<tr><td>怎么上主峰</td><td>环保车到换乘站，再乘越野倒站车直达主峰</td><td>环保车到半山，自己爬 <b>1442 级台阶</b></td><td>环保车直达天池附近，步行约 200 米</td></tr>
+<tr><td>天池视野</td><td>俯视，受前方山峰遮挡，约见 2/3 湖面</td><td>平视全景，无遮挡，拍片最好</td><td>侧视全景，离湖面最近，可见满月形</td></tr>
+<tr><td>核心景点</td><td>长白瀑布、聚龙泉、绿渊潭、小天池、地下森林</td><td>锦江大峡谷、高山花园（7 月）、王池（7/1–9/15）</td><td>鸭绿江大峡谷、岳桦双瀑、碳化木遗迹</td></tr>
+<tr><td>官方游览时长</td><td>6–8 小时</td><td>5–6 小时</td><td>3–4 小时</td></tr>
+<tr><td>单人门票车票</td><td>105 ＋ 班线 35 ＋ 环保车 85 ＋ 主峰车 80 ＝ <b>305 元</b></td><td>105 ＋ 班线 19 ＋ 环保车 85 ＝ <b>209 元</b>（冬季另加雪地摩托 165）</td><td>105 ＋ 环保车 85 ＝ <b>190 元</b></td></tr>
+<tr><td>开放期</td><td>全年</td><td>全年</td><td><b>仅 5 月中旬—10 月</b>，每日限流</td></tr>
+</tbody>
+</table>
+</div>
 
-<details>
-  <summary>历史段 25 天已核实锚点（2023-11-09 至 2026-01-15）</summary>
-  <div class="body" style="padding:0">
-    <table class="table" id="histtable">
-      <thead><tr><th>日期</th><th>状态</th><th>官方口径要点</th><th>来源</th></tr></thead>
-      <tbody></tbody>
-    </table>
+<div class="slopes">
+  <div class="slope n">
+    <h4>北坡 · 最省力</h4>
+    <div class="who">第一次来、带老人小孩、想一趟把景点看全的人</div>
+    <div class="chips"><span>6–8 小时</span><span>约 305 元</span><span>全年开放</span></div>
+    <dl>
+      <dt>路线</dt>
+      <dd>集散中心 → 环保车 → 换乘站 → 倒站车 → 天池主峰 → 长白瀑布 → 聚龙泉 → 绿渊潭 → 小天池 → 地下森林</dd>
+      <dt>高铁</dt>
+      <dd>长白山站，就在二道白河，打车到集散中心约 9 公里</dd>
+    </dl>
+    <div class="warn">倒站车 72 道弯，易晕车，提前吃药；主峰常无信号；午后起雾概率高，尽量 7:00 前入园、先冲天池。</div>
   </div>
-</details>
+  <div class="slope w">
+    <h4>西坡 · 最出片</h4>
+    <div class="who">想拍天池全景、体力尚可、7–8 月想看高山花园的人</div>
+    <div class="chips"><span>5–6 小时</span><span>约 209 元</span><span>全年开放</span></div>
+    <dl>
+      <dt>路线</dt>
+      <dd>松江河集散中心 → 环保车 → 半山 → 1442 级台阶 → 天池观景台 → 锦江大峡谷</dd>
+      <dt>高铁</dt>
+      <dd>松江河站，或飞长白山机场（离西坡更近）</dd>
+    </dl>
+    <div class="warn">台阶总长约 900 米、相当于 80 层楼，无代步车；雨后湿滑，膝盖不好和老人慎选；下午会提前停止登顶。</div>
+  </div>
+  <div class="slope s">
+    <h4>南坡 · 最清静</h4>
+    <div class="who">二刷、想避开人潮、想看边境线的人</div>
+    <div class="chips"><span>3–4 小时</span><span>约 190 元</span><span>5 月中—10 月</span></div>
+    <dl>
+      <dt>路线</dt>
+      <dd>南景区山门 → 环保车 → 天池 → 岳桦双瀑 → 鸭绿江大峡谷</dd>
+      <dt>距离</dt>
+      <dd>距北景区集散中心约 170 公里，从二道白河过去单程近 2 小时</dd>
+    </dl>
+    <div class="warn">每日限流约千人，票最难抢；G331 边境路段部分无信号；大雾随时关闭，别把它当主行程。</div>
+  </div>
+</div>
+
+<h3 class="sec" style="font-size:15px;margin-top:26px">几条硬规则</h3>
+<ul class="rules">
+  <li><b>没有现场票。</b>只在「长白山」「长白山一机游」微信小程序或公众号实名预约，提前 7 天，每天 18:00 放第 7 天库存，18:30 放回流票。第三方代抢不受官方保护。</li>
+  <li><b>「105 元门票 5 天通玩三坡」早已作废。</b>该惠民政策于 2023 年 7 月 1 日废止，现行门票当日当次有效，北、西、南三坡必须分别预约购票。大量游记仍在传旧规则，以官方小程序为准。</li>
+  <li><b>环保车 85 元全员必购，无任何优惠。</b>免大门票的 65 岁以上老人、1.2 米以下儿童，环保车照收。</li>
+  <li><b>天池主峰随时可能关。</b>大风、大雾、暴雪都会临时关闭主峰，出发当天早上先查小程序公告和「长白山气象台」。</li>
+  <li><b>未使用的票当日 24 点前可全退。</b>天池没开、行程变了，当天 24 点前在线申请，不收手续费。</li>
+</ul>
+<p class="src">门票车票与预约规则据长白山管委会官网、吉林省文旅厅（2025-08）及管委会 2026-09-17 票价有效期答复；限流与开放期据景区历次公告，每年有浮动，出行前以官方当日公告为准。</p>
 
 <footer>
-  数据截至 2026-11-08 ｜ 最后构建 2026-11-09 09:20 ｜ 本次抓取 官方接口正常<br>
+  数据截至 2026-11-08 ｜ 最后构建 2026-11-09 09:36 ｜ 本次抓取 官方接口正常<br>
   逐日公报：长白山发布（澎湃号·政务，pphId 111214）｜ 媒体公告：央视网、光明网、环球网、中国吉林网、城市晚报、海报新闻等<br>
   页面由 GitHub Actions 每日 18:00（北京时间）自动重建 ｜ 公报原文版权归长白山保护开发区融媒体中心
 </footer>
@@ -344,19 +342,9 @@ function bindTip(){
   });
 }
 
-function fillHist(){
-  const tb = document.querySelector('#histtable tbody');
-  const rows = DAYS.filter(d=>d.lv!=='daily' && d.s!=='NO_RECORD').sort((a,b)=>a.d<b.d?-1:1);
-  tb.innerHTML = rows.map(d=>{
-    const sp = SPEC[d.s];
-    const note = d.n || d.w;
-    return `<tr><td class="n">${d.d}</td>
-      <td><span style="display:inline-block;padding:2px 7px;border-radius:5px;background:${sp.c};color:#fff;font-size:11px;white-space:nowrap">${sp.n}</span></td>
-      <td>${note}</td><td style="color:#8b9298">${d.ns||d.src}</td></tr>`;
-  }).join('');
-}
+/* 历史锚点表已移除，不再填充 */
 
-fillHist();
+
 render(curYear);
 </script>
 </body>
