@@ -1,5 +1,5 @@
 {
- "updated_at_cst": "2026-11-10 19:21:38",
+ "updated_at_cst": "2026-11-11 01:38:32",
  "latest_data_date": "2026-11-08",
  "mode": "incremental",
  "list_api_ok": true,
@@ -11,7 +11,7 @@
  "play_rate_pct": 48.2,
  "daily_bulletins": 253,
  "qunar_ok": true,
- "qunar_today_bookable": false,
+ "qunar_today_bookable": true,
  "qunar_tomorrow_bookable": true,
  "qunar_bookable_dates": [
   "2026-11-11",
