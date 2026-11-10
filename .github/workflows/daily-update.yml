@@ -4,8 +4,11 @@ on:
   push:
     branches: [main]
   schedule:
-    # 北京时间 18:00 = UTC 10:00
+    # 北京时间 18:00 = UTC 10:00（主更新：官方当日公报 + 次日票务信号）
     - cron: "0 10 * * *"
+    # 北京时间 08:30 = UTC 00:30（晨间补充：此时才能抓到“当天主峰车票是否在售”，
+    # 这是判断当天是否开放的独立信号；18:00 时当日票已停售，抓不到）
+    - cron: "30 0 * * *"
   workflow_dispatch:
     inputs:
       full_refresh:

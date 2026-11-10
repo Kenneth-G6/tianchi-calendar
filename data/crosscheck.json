@@ -1,0 +1,17 @@
+[
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-11",
+   "2026-11-12",
+   "2026-11-15",
+   "2026-11-16",
+   "2026-11-18"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-10 19:21",
+  "err": ""
+ }
+]

@@ -32,6 +32,12 @@ HEADERS = {
     "Referer": "https://m.thepaper.cn/",
 }
 
+# 交叉验证：票务平台侧写。天池主峰车票与天池开放强绑定——主峰停运当天官方会停止售票/退票，
+# 因此“某日主峰车票可订”可作为官方公报缺失时的独立信号（预期开放，不等于当天实际）。
+QUNAR_URL = "https://touch.piao.qunar.com/touch/detail.htm?id=9462"
+CROSSCHECK = os.path.join(DATA, "crosscheck.json")
+CST = datetime.timezone(datetime.timedelta(hours=8))
+
 # 单篇核查（历史段可直接取到的公报）
 ANCHOR_IDS = [
     29952376, 30089460, 30126949, 30236005, 30480602, 30610720, 30734091,
@@ -179,6 +185,58 @@ def build_record(raw_text, title, pub, cid, src, url, level):
 
 
 # ----------------------------- 主流程 -----------------------------
+def fetch_qunar_status(today=None):
+    """票务平台侧写：解析“天池主峰车票”的可订日期，作为官方公报之外的独立交叉验证信号。
+
+    口径说明：
+      * 「某日主峰车票可订」= 官方系统仍在该日售票 → 预期天池开放（不是当日实际状态）
+      * 「今日不可订」在售票时段内（<15:30）是强信号（主峰停运/停售）；
+        在 18:00 之后抓，票已停售，不可据此判关闭，只记录事实。
+    """
+    now_cst = datetime.datetime.now(CST)
+    today = today or now_cst.date()
+    out = {
+        "ok": False, "bookable": [], "today_bookable": None,
+        "tomorrow_bookable": None, "past_sale_cutoff": now_cst.strftime("%H:%M") >= "15:30",
+        "checked_at": now_cst.strftime("%Y-%m-%d %H:%M"), "err": "",
+    }
+    try:
+        r = requests.get(QUNAR_URL, timeout=25, headers={
+            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) "
+                          "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 "
+                          "Mobile/15E148 Safari/604.1",
+            "Referer": "https://touch.piao.qunar.com/"})
+        r.raise_for_status()
+        h = r.text
+        if "天池主峰车票" not in h:
+            out["err"] = "页面未出现“天池主峰车票”字样，结构可能变化"
+            return out
+        dates = set()
+        for m in re.finditer(r"可订(今日|明日|\d{1,2}月\d{1,2}日)", h):
+            pre = re.sub(r"<[^>]+>", " ", h[max(0, m.start() - 420):m.start()])
+            # 只要“含主峰车票”的 SKU，排除“不含北景区天池主峰车票”的坑位
+            if "天池主峰车票" not in pre or "不含" in pre[-160:]:
+                continue
+            lab = m.group(1)
+            if lab == "今日":
+                dates.add(today.isoformat())
+            elif lab == "明日":
+                dates.add((today + datetime.timedelta(days=1)).isoformat())
+            else:
+                mm = re.match(r"(\d{1,2})月(\d{1,2})日", lab)
+                try:
+                    dates.add(datetime.date(today.year, int(mm.group(1)), int(mm.group(2))).isoformat())
+                except ValueError:
+                    pass
+        out["bookable"] = sorted(dates)
+        out["ok"] = True
+        out["today_bookable"] = today.isoformat() in dates
+        out["tomorrow_bookable"] = (today + datetime.timedelta(days=1)).isoformat() in dates
+    except Exception as e:
+        out["err"] = f"{type(e).__name__}: {e}"
+    return out
+
+
 def main():
     os.makedirs(DATA, exist_ok=True)
     cache = {}
@@ -321,6 +379,20 @@ def main():
     payload = json.dumps({"days": D, "stats": dict(month=month, reason=dict(reason))},
                          ensure_ascii=False, separators=(",", ":"))
 
+    # 5.5) 交叉验证：票务平台侧写（官方公报之外的独立信号）
+    xc = fetch_qunar_status()
+    try:
+        hist_xc = json.load(open(CROSSCHECK, encoding="utf-8")) if os.path.exists(CROSSCHECK) else []
+        if not isinstance(hist_xc, list):
+            hist_xc = []
+    except Exception:
+        hist_xc = []
+    hist_xc.append(xc)
+    hist_xc = hist_xc[-60:]
+    json.dump(hist_xc, open(CROSSCHECK, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print(f"[xcheck] qunar ok={xc['ok']} today={xc['today_bookable']} "
+          f"tomorrow={xc['tomorrow_bookable']} dates={xc['bookable']}")
+
     # 6) 渲染
     tpl = open(TPL, encoding="utf-8").read()
     findings = f"""
@@ -331,7 +403,27 @@ def main():
     <p><b>⑤ 历史段无法逐日回溯。</b>政务号在澎湃的存档被服务端限制在约最近 10 个月（最早 {dailies_min}），更早内容只能以单篇公报与媒体公告“点状锚定”，因此 2023–2025 不给开放率。</p>
     """
 
+    # 交叉验证文案
+    def _md(d):
+        return d[5:].replace("-", "/")
+    if xc["ok"]:
+        bk = "、".join(_md(x) for x in xc["bookable"][:6]) or "无可订日期"
+        if xc["today_bookable"]:
+            today_line = f"今日（{xc['checked_at'][:10]}）主峰车票可订"
+        elif xc["past_sale_cutoff"]:
+            today_line = "今日主峰车票已停售（已过 15:30 停止检票，不能据此判关闭）"
+        else:
+            today_line = "今日主峰车票不可订"
+        xcheck_html = (f'<div class="xc"><b>交叉验证 · 票务侧写</b>　天池主峰车票可订日期：<b>{bk}</b>；'
+                       f'{today_line}。'
+                       f'票务只说明“官方这两天仍在卖主峰票”，属于<b>预期开放</b>，不等于当日实际；'
+                       f'当天是否真能上主峰，以官方公众号/小程序当日播报为准。</div>')
+    else:
+        xcheck_html = (f'<div class="xc"><b>交叉验证 · 票务侧写</b>　本次未取到票务平台数据'
+                       f'（{(xc.get("err") or "")[:60]}），本页仅以官方公报为准。</div>')
+
     repl = {
+        "{{XCHECK}}": xcheck_html,
         "{{RANGE}}": f"{START_DATE.isoformat()} — {end.isoformat()}",
         "{{TOTAL}}": f"{len(serial):,}",
         "{{NDAILY}}": str(ndaily),
@@ -380,6 +472,10 @@ def main():
         "figures": str(YR),
         "play_rate_pct": rate,
         "daily_bulletins": ndaily,
+        "qunar_ok": xc["ok"],
+        "qunar_today_bookable": xc["today_bookable"],
+        "qunar_tomorrow_bookable": xc["tomorrow_bookable"],
+        "qunar_bookable_dates": xc["bookable"],
     }, open(os.path.join(DATA, "last-run.json"), "w", encoding="utf-8"),
         ensure_ascii=False, indent=1)
     print(f"[done] {OUT} {len(html.encode('utf-8'))//1024} KB | {len(serial)} days | {YR} rate {rate}% | daily {ndaily}")
