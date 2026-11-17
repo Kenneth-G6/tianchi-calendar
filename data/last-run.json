@@ -1,9 +1,9 @@
 {
- "updated_at_cst": "2026-11-17 04:14:45",
+ "updated_at_cst": "2026-11-17 16:23:15",
  "latest_data_date": "2026-11-15",
  "mode": "incremental",
- "list_api_ok": true,
- "scanned_articles": 100,
+ "list_api_ok": false,
+ "scanned_articles": 0,
  "dailies_in_cache": 262,
  "new_details_fetched": 0,
  "window_days": 1103,
@@ -11,12 +11,10 @@
  "play_rate_pct": 48.1,
  "daily_bulletins": 260,
  "qunar_ok": true,
- "qunar_today_bookable": true,
+ "qunar_today_bookable": false,
  "qunar_tomorrow_bookable": true,
  "qunar_bookable_dates": [
-  "2026-11-17",
   "2026-11-18",
-  "2026-11-19",
-  "2026-11-24"
+  "2026-11-19"
  ]
 }
