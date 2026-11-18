@@ -1,6 +1,8 @@
 {
- "updated_at_cst": "2026-11-18 21:07:03",
- "missing_recent_dates": [],
+ "updated_at_cst": "2026-11-19 02:45:49",
+ "missing_recent_dates": [
+  "2026-11-18"
+ ],
  "latest_data_date": "2026-11-17",
  "mode": "incremental",
  "list_api_ok": true,
@@ -12,10 +14,11 @@
  "play_rate_pct": 48.1,
  "daily_bulletins": 262,
  "qunar_ok": true,
- "qunar_today_bookable": false,
+ "qunar_today_bookable": true,
  "qunar_tomorrow_bookable": true,
  "qunar_bookable_dates": [
   "2026-11-19",
-  "2026-11-20"
+  "2026-11-20",
+  "2026-11-21"
  ]
 }
