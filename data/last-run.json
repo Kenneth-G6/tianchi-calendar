@@ -1,5 +1,5 @@
 {
- "updated_at_cst": "2026-11-22 01:17:28",
+ "updated_at_cst": "2026-11-22 05:26:41",
  "missing_recent_dates": [],
  "latest_data_date": "2026-11-21",
  "mode": "incremental",
@@ -17,6 +17,7 @@
  "qunar_bookable_dates": [
   "2026-11-22",
   "2026-11-23",
+  "2026-11-24",
   "2026-11-29"
  ]
 }
