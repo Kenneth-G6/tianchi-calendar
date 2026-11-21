@@ -390,5 +390,18 @@
   "past_sale_cutoff": false,
   "checked_at": "2026-11-21 06:29",
   "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-22",
+   "2026-11-23",
+   "2026-11-29"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-21 15:37",
+  "err": ""
  }
 ]
