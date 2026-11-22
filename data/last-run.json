@@ -1,6 +1,9 @@
 {
- "updated_at_cst": "2026-11-22 15:20:40",
- "missing_recent_dates": [],
+ "updated_at_cst": "2026-11-22 18:21:40",
+ "missing_recent_dates": [
+  "2026-11-22"
+ ],
+ "today_in_cache": false,
  "latest_data_date": "2026-11-21",
  "mode": "incremental",
  "list_api_ok": true,

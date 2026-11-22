@@ -465,15 +465,20 @@ def main():
     cst_date = cst.date()
     pub_set = {v.get("pub", "")[:10] for v in cache.values() if v.get("pub")}
     missing_recent = []
-    for i in range(1, 8):
+    for i in range(0, 8):
         d = cst_date - datetime.timedelta(days=i)
         if d >= first_daily and d.isoformat() not in pub_set:
+            # 当天公报官方一般在 08:45-09:20 才发布，早轮跑时本就不存在，不报缺；
+            # 过了 12:00 仍缺才算异常（多为澎湃列表索引延迟）。
+            if i == 0 and cst.hour < 12:
+                continue
             missing_recent.append(d.isoformat())
     if missing_recent:
         print(f"[gap] 最近7天缓存缺: {missing_recent}")
     json.dump({
         "updated_at_cst": cst.strftime("%Y-%m-%d %H:%M:%S"),
         "missing_recent_dates": missing_recent,
+        "today_in_cache": cst_date.isoformat() in pub_set,
         "latest_data_date": end.isoformat(),
         "mode": mode,
         "list_api_ok": list_ok,
