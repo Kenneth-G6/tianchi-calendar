@@ -148,7 +148,7 @@ def north_text(text):
 
 
 def classify(raw):
-    j = BOILER_RE.sub("", raw)
+    j = BOILER_RE.sub("", raw).replace("小天池", "小水池")   # 小天池是独立景点，别当成天池
     if not raw.strip():
         return "NO_RECORD", "无北景区段落"
     if re.search(r"天池(景点|主峰景点)[^。，]{0,8}(全天关闭|关闭|暂停游览|暂停开放)", j) or \
@@ -201,7 +201,7 @@ def split_slopes(text):
 
 def classify_west(raw):
     """西坡：天池景点在海拔高处，单独停游；其余景点（锦江大峡谷等）常开。"""
-    j = BOILER_RE.sub("", raw or "")
+    j = BOILER_RE.sub("", raw or "").replace("小天池", "小水池")
     if not j.strip():
         return "NO_RECORD", "无西景区段落"
     if re.search(r"西景区[^。]{0,40}不具备安全运营条件[^。]{0,20}(全天暂停开放|暂停开放|全天关闭)", j) or \
@@ -227,7 +227,7 @@ def classify_west(raw):
 
 def classify_south(raw):
     """南坡：每年 5 月中—10 月开放，其余时间为季节性闭园；开季后逐日播报。"""
-    j = BOILER_RE.sub("", raw or "")
+    j = BOILER_RE.sub("", raw or "").replace("小天池", "小水池")
     if not j.strip():
         return "NO_RECORD", "无南景区段落"
     if ("季节性闭园" in j) or ("季节性关闭" in j) or ("实行季节性" in j):
