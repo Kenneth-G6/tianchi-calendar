@@ -78,7 +78,12 @@ REASON_RULES = [
     ("设施维修", r"维修|倒树|基础设施|维护"),
 ]
 PLAY = {"OPEN", "OPEN_DELAY", "PARTIAL"}
-BLOCK = {"CLOSED_TIANCHI", "CLOSED_AREA", "VEHICLE_STOP", "PARTIAL", "UNCERTAIN"}
+BLOCK = {"CLOSED_TIANCHI", "CLOSED_AREA", "VEHICLE_STOP", "PARTIAL", "UNCERTAIN",
+         "CLOSED_SEASON", "CLOSED_REPAIR"}
+
+# 三坡（同一篇公报里分段播报，北、西逐日播报，南多为季节性闭园）
+SLOPES = ("n", "w", "s")
+SLOPE_LABEL = {"n": "北景区", "w": "西景区", "s": "南景区"}
 
 
 # ----------------------------- 抓取 -----------------------------
@@ -150,7 +155,8 @@ def classify(raw):
        re.search(r"天池[^。，]{0,6}景点(全天)?关闭", j) or \
        re.search(r"天池(主峰)?[^。]{0,15}(全天关闭|暂停游览)", j):
         return "CLOSED_TIANCHI", "天池景点关闭 / 暂停游览"
-    if re.search(r"北(、西)?景区[^。]{0,30}(全天关闭|全天停运|全天暂停开放)", j) or \
+    if re.search(r"不具备安全运营条件[^。]{0,12}(全天关闭|全天暂停开放)", j) or \
+       re.search(r"北(、西)?景区[^。]{0,30}(全天关闭|全天停运|全天暂停开放)", j) or \
        re.search(r"北(、西)?景区[^。]{0,25}不具备安全运营条件[^。]{0,12}(全天关闭|今日关闭|全天暂停开放|全天停运)", j):
         return "CLOSED_AREA", "北景区整体关闭 / 停运"
     if re.search(r"天池(车辆|主峰车辆|主峰车)[^。]{0,30}(停运|停止运营|暂停运营)", j):
@@ -171,17 +177,106 @@ def classify(raw):
     return "UNKNOWN", "未识别"
 
 
+def split_slopes(text):
+    """把《今日长白山》正文按三坡切段。
+
+    官方体例：`X月X日长白山北景区：…` → `X月X日长白山西景区：…` → `长白山南景区：…`
+    → `长白山气象台发布…`（气温、指数、公交等噪声都在末段之后，切掉即可）。
+    """
+    t = " ".join(re.sub(r"\s+", " ", text or "").split())
+    mn = re.search(r"长白山北景区[：:]", t)
+    mw = re.search(r"长白山西景区[：:]", t)
+    ms = re.search(r"长白山南景区[：:]", t)
+    # 末段结束线：新版体例用“长白山气象台发布”，旧版（2025 年前）用“预计X日白天…”
+    me = re.search(r"长白山气象台|预计\s*\d{1,2}\s*日白天", t)
+    out = {}
+    if mn and mw and mw.start() > mn.end():
+        out["n"] = t[mn.end():mw.start()].strip()
+    if mw and ms and ms.start() > mw.end():
+        out["w"] = t[mw.end():ms.start()].strip()
+    if ms:
+        out["s"] = t[ms.end():(me.start() if me and me.start() > ms.end() else len(t))].strip()
+    return out
+
+
+def classify_west(raw):
+    """西坡：天池景点在海拔高处，单独停游；其余景点（锦江大峡谷等）常开。"""
+    j = BOILER_RE.sub("", raw or "")
+    if not j.strip():
+        return "NO_RECORD", "无西景区段落"
+    if re.search(r"西景区[^。]{0,40}不具备安全运营条件[^。]{0,20}(全天暂停开放|暂停开放|全天关闭)", j) or \
+       re.search(r"西景区[^。]{0,30}(全天关闭|全天暂停开放)", j) or \
+       re.search(r"不具备安全运营条件[^。]{0,12}(全天关闭|全天暂停开放)", j):
+        return "CLOSED_AREA", "西景区整体关闭"
+    if re.search(r"西景区[^。]{0,50}停止检票", j):
+        return "PARTIAL", "西景区中途停止检票"
+    if re.search(r"天池景点[^。]{0,12}(暂停游览|全天关闭|关闭)", j) or \
+       re.search(r"天池[^。]{0,10}(暂停游览|全天关闭)", j):
+        return "CLOSED_TIANCHI", "西坡天池景点关闭"
+    if re.search(r"天池车辆[^。]{0,30}(停运|暂停运营)", j):
+        return "VEHICLE_STOP", "西坡天池车辆停运"
+    if re.search(r"预计延缓\s*\d+\s*分钟开放", j) or re.search(r"清理积雪[^。]{0,25}延缓", j):
+        return "OPEN_DELAY", "西坡延缓 / 限时开放"
+    if re.search(r"天池[^。]{0,12}(正常开放|暂时开放)", j) or "天池、锦江大峡谷" in j or \
+       re.search(r"天池[、，][^。]{0,25}(正常开放|暂时开放)", j):
+        return "OPEN", "西坡天池正常开放"
+    if re.search(r"正常开放", j):
+        return "OPEN_OTHER", "仅其他景点给出口径"
+    return "UNKNOWN", "未识别"
+
+
+def classify_south(raw):
+    """南坡：每年 5 月中—10 月开放，其余时间为季节性闭园；开季后逐日播报。"""
+    j = BOILER_RE.sub("", raw or "")
+    if not j.strip():
+        return "NO_RECORD", "无南景区段落"
+    if ("季节性闭园" in j) or ("季节性关闭" in j) or ("实行季节性" in j):
+        return "CLOSED_SEASON", "南坡季节性闭园（每年 5 月中—10 月开放）"
+    if re.search(r"将于[^。]{0,20}开放", j):
+        return "CLOSED_SEASON", "南坡尚未到开放日"
+    if re.search(r"(山体滑坡|临时关闭|抢修施工)", j):
+        return "CLOSED_REPAIR", "南坡抢修 / 临时关闭"
+    if re.search(r"不具备安全运营条件[^。]{0,15}(全天暂停|全天关闭)", j) or \
+       re.search(r"南景区[^。]{0,15}(暂停游览|全天暂停开放|全天关闭)", j):
+        return "CLOSED_AREA", "南景区整体关闭"
+    if re.search(r"天池[^。]{0,12}(暂停游览|全天关闭|关闭)", j):
+        return "CLOSED_TIANCHI", "南坡天池景点关闭"
+    if re.search(r"停止检票", j):
+        return "PARTIAL", "南坡中途停止检票"
+    if re.search(r"预计延缓\s*\d+\s*分钟开放", j):
+        return "OPEN_DELAY", "南坡延缓开放"
+    if re.search(r"正常开放", j):
+        return "OPEN", "南坡正常开放"
+    return "UNKNOWN", "未识别"
+
+
+def classify_slope(raw, slope):
+    if slope == "n":
+        return classify(raw)
+    if slope == "w":
+        return classify_west(raw)
+    return classify_south(raw)
+
+
 def build_record(raw_text, title, pub, cid, src, url, level):
-    raw = north_text(raw_text)
+    segs = split_slopes(raw_text)
+    raw = segs.get("n") or north_text(raw_text)
     st, why = classify(raw)
     rs = [n for n, p in REASON_RULES if st in BLOCK and re.search(p, raw)]
+    # 三坡：同一篇公报里各自判定，missing 段落按 NO_RECORD 留空
+    slopes = {}
+    for sl in SLOPES:
+        sst, swhy = classify_slope(segs.get(sl, ""), sl)
+        rs2 = [n for n, p in REASON_RULES if sst in BLOCK and re.search(p, segs.get(sl, ""))]
+        slopes[sl] = dict(s=sst, w=swhy, r=rs2, g=(segs.get(sl) or "")[:140])
     m = re.search(r"(\d{1,2})月(\d{1,2})日", title or "")
     mo, da = (int(m.group(1)), int(m.group(2))) if m else (None, None)
     y = int(pub[:4]) if pub else None
     if y and mo and pub and mo - int(pub[5:7]) >= 6:
         y -= 1
     return dict(contId=str(cid), title=title, pub=pub, year=y, month=mo, day=da,
-                status=st, why=why, reason=rs, north=raw[:400], src=src, url=url, level=level)
+                status=st, why=why, reason=rs, north=raw[:400], src=src, url=url, level=level,
+                slopes=slopes)
 
 
 # ----------------------------- 主流程 -----------------------------
@@ -311,7 +406,8 @@ def main():
             return
         day[k] = dict(date=k, status=r["status"], why=r["why"], reason=r["reason"],
                       title=r["title"], url=r["url"], src=r["src"], range=r["north"],
-                      level=r["level"], note="", note_src="")
+                      level=r["level"], note="", note_src="",
+                      slopes=r.get("slopes") or {})
 
     for r in recs + arecs:
         if r["year"] and r["month"] and r["day"]:
@@ -320,12 +416,17 @@ def main():
             except ValueError:
                 pass
     for ds, st, why, srcn in MEDIA:
+        # 媒体公告只说“北、西景区”，能覆盖到的坡同状态，其余坡留空不臆测
+        med = {sl: dict(s="NO_RECORD", w="媒体公告未分坡播报", r=[], g="") for sl in SLOPES}
+        med["n"] = dict(s=st, w=why, r=[], g=why)
+        if "西" in why:
+            med["w"] = dict(s=st, w=why, r=[], g=why)
         if ds in day:
             day[ds]["note"] = why; day[ds]["note_src"] = srcn
         else:
             day[ds] = dict(date=ds, status=st, why=why, reason=[], title=why, url="",
                            src=srcn + "（公告转载，非逐日公报）", range=why, level="media",
-                           note=why, note_src=srcn)
+                           note=why, note_src=srcn, slopes=med)
 
     latest = max((d for d in day if day[d]["status"] != "NO_RECORD"), default=None)
     if not latest:
@@ -336,7 +437,7 @@ def main():
         k = d.isoformat()
         serial.append(day.get(k, dict(date=k, status="NO_RECORD", why="无公开逐日记录",
                                      reason=[], title="", url="", src="", range="",
-                                     level="none", note="", note_src="")))
+                                     level="none", note="", note_src="", slopes={})))
         d += datetime.timedelta(days=1)
 
     # 5) 统计
@@ -372,10 +473,16 @@ def main():
 
     D = []
     for x in serial:
+        sl = x.get("slopes") or {}
         D.append({"d": x["date"], "s": x["status"], "w": x["why"], "r": x["reason"],
                   "t": (x["title"] or "")[:60], "u": x["url"], "src": (x["src"] or "")[:40],
                   "g": (x["range"] or "")[:160], "lv": x["level"],
-                  "n": (x["note"] or "")[:80], "ns": (x["note_src"] or "")[:20]})
+                  "n": (x["note"] or "")[:80], "ns": (x["note_src"] or "")[:20],
+                  "sn": (sl.get("n") or {}).get("s", "NO_RECORD"),
+                  "sw": (sl.get("w") or {}).get("s", "NO_RECORD"),
+                  "ss": (sl.get("s") or {}).get("s", "NO_RECORD"),
+                  "gw": ((sl.get("w") or {}).get("g") or "")[:60],
+                  "gs": ((sl.get("s") or {}).get("g") or "")[:45]})
     payload = json.dumps({"days": D, "stats": dict(month=month, reason=dict(reason))},
                          ensure_ascii=False, separators=(",", ":"))
 

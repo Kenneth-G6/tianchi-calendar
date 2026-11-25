@@ -3,24 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>长白山北景区天池 · 逐日开放台账</title>
-<meta name="description" content="长白山北景区天池逐日开/关记录，按官方每日公报逐条解析。">
+<title>长白山天池 · 逐日开放台账</title>
+<meta name="description" content="长白山北、西、南三景区天池逐日开/关记录，按官方每日公报逐条解析。">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#f5f6f8;--card:#fff;--ink:#16181d;--muted:#687078;--line:#e3e6ea;
   --open:#1f9d63;--opendelay:#63c39a;--partial:#e0a020;--uncertain:#93a1b0;
   --vehicle:#3f6ea8;--closed:#d05450;--closedarea:#8e2020;--none:#e9eaec;
+  --season:#6f7b87;--repair:#7d6f96;--hero:#0b1620;
   --accent:#8e2020;
 }
 body{overflow-x:hidden;background:var(--bg);color:var(--ink);font:14px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1180px;margin:0 auto;padding:0 18px 60px}
 
-/* ---------- 顶部 ---------- */
-header{padding:32px 0 18px}
-.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:700;margin-bottom:8px}
-h1{font-size:26px;line-height:1.3;font-weight:700;letter-spacing:-.4px}
-h1 em{font-style:normal;color:var(--accent)}
+/* ---------- 顶部 Hero（Apple 风格）---------- */
+.hero{position:relative;overflow:hidden;border-radius:0 0 30px 30px;
+  background:linear-gradient(180deg,rgba(6,14,24,.16) 0%,rgba(6,14,24,.38) 52%,rgba(6,14,24,.66) 100%),
+    url(assets/tianchi-hero.jpg) center 58%/cover no-repeat;
+  color:#fff}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 0%,transparent 45%,rgba(4,10,18,.22) 100%);pointer-events:none}
+.hero-in{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:56px 22px 60px}
+.eyebrow{font-size:11px;letter-spacing:.22em;color:rgba(214,232,248,.82);font-weight:600;text-transform:uppercase;margin-bottom:14px}
+h1{font-size:clamp(34px,5.4vw,60px);line-height:1.02;font-weight:600;letter-spacing:-.035em;color:#fff}
+h1 em{font-style:normal;font-weight:300;color:rgba(214,232,248,.9);letter-spacing:.02em;margin-left:.26em}
+.hero .sub{font-size:clamp(14px,1.5vw,18px);font-weight:400;color:rgba(255,255,255,.8);margin-top:14px;letter-spacing:-.01em;line-height:1.5}
+.hero .meta{color:rgba(255,255,255,.7)}
+.hero .meta b{color:#fff;font-weight:600}
+
+/* ---------- 三坡切换（分段控件）---------- */
+.scen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:22px 0 0}
+.scen button{position:relative;font:inherit;text-align:left;cursor:pointer;border:1px solid var(--line);background:#fff;
+  border-radius:16px;padding:13px 15px 12px;min-width:0;transition:background .22s,color .22s,border-color .22s,box-shadow .22s,transform .22s}
+.scen button:hover{transform:translateY(-1px)}
+.scen .sl{display:block;font-size:10.5px;letter-spacing:.12em;color:#9aa1a8;margin-bottom:3px}
+.scen .st{display:block;font-size:19px;font-weight:650;letter-spacing:-.02em;line-height:1.15}
+.scen .sd{display:block;font-size:11.5px;color:#8b9298;margin-top:5px;line-height:1.45}
+.scen button.on{background:#101a24;color:#fff;border-color:#101a24;box-shadow:0 10px 28px rgba(16,26,36,.18)}
+.scen button.on .sl{color:rgba(255,255,255,.55)}
+.scen button.on .sd{color:rgba(255,255,255,.62)}
+.scen button.on .pill{background:rgba(255,255,255,.14);color:#fff}
+.scen .pill{position:absolute;top:13px;right:14px;font-size:10.5px;padding:2px 8px;border-radius:20px;background:#f1f3f5;color:#5c646c;font-variant-numeric:tabular-nums;letter-spacing:0}
 .meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:12px;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
 .meta b{color:var(--ink);font-weight:600}
 
@@ -35,7 +58,8 @@ h1 em{font-style:normal;color:var(--accent)}
 .lg:hover{background:#eceef1}
 .lg.dim{opacity:.35}
 .sw{width:10px;height:10px;border-radius:3px;flex:none}
-.year-meta{font-size:12.5px;color:var(--muted);margin-bottom:14px;font-variant-numeric:tabular-nums}
+.year-meta{font-size:12.5px;color:var(--muted);margin-bottom:6px;font-variant-numeric:tabular-nums}
+.calib{font-size:11.5px;color:#9aa1a8;line-height:1.7;margin:0 0 14px}
 
 .months{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .mblock{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 11px 10px;min-width:0}
@@ -46,6 +70,7 @@ h1 em{font-style:normal;color:var(--accent)}
 .cell{min-width:0;overflow:hidden;aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:pointer;position:relative;transition:transform .12s,box-shadow .12s;font-variant-numeric:tabular-nums}
 .cell:hover{transform:scale(1.16);box-shadow:0 3px 12px rgba(0,0,0,.18);z-index:5}
 .cell.empty{cursor:default;background:transparent}
+.cell.fut{cursor:default;background:#fbfcfd;border:1px dashed #e6e9ed;color:#c9ced4;font-weight:500}
 .cell.dim{opacity:.22}
 .cell.media{outline:2px dashed rgba(142,32,32,.5);outline-offset:-2px}
 .cell.single::after{content:"";position:absolute;top:1.5px;right:1.5px;width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.9)}
@@ -122,6 +147,17 @@ footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-si
 
 @media(max-width:980px){.months{grid-template-columns:repeat(3,minmax(0,1fr))}.vgrid{grid-template-columns:1fr}.slopes{grid-template-columns:1fr}}
 @media(max-width:640px){
+  .hero{border-radius:0 0 22px 22px;
+    background:linear-gradient(180deg,rgba(6,14,24,.16) 0%,rgba(6,14,24,.4) 50%,rgba(6,14,24,.68) 100%),
+      url(assets/tianchi-hero-960.jpg) center 55%/cover no-repeat}
+  .hero-in{padding:38px 16px 42px}
+  .hero .sub{font-size:13.5px;margin-top:10px}
+  .hero .meta{font-size:11.5px;gap:4px 10px}
+  .scen{gap:6px;margin-top:16px}
+  .scen button{padding:10px 9px 9px;border-radius:13px}
+  .scen .sl{font-size:9.5px;letter-spacing:.06em}
+  .scen .st{font-size:14.5px}
+  .scen .sd,.scen .pill{display:none}
   .wrap{padding:0 12px 50px}
   h1{font-size:21px}
   .months{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
@@ -129,34 +165,43 @@ footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-si
   .slopes{gap:10px}
   .mblock{padding:9px 8px 7px}
   .cell{font-size:10px;border-radius:3px}
-  .legend{margin-left:0;width:100%}
+  .legend{margin-left:0;width:100%;gap:1px 2px}
+  .lg{flex:0 0 auto;font-size:10px;padding:3px 5px;gap:4px}
+  .sw{width:9px;height:9px}
+  .calib{font-size:10.5px;line-height:1.6;margin-bottom:11px}
   .tabs{width:100%;justify-content:space-between;min-width:0}
   .tab{flex:1 1 0;min-width:0;padding:7px 4px;font-size:12px}
 }
 </style>
 </head>
 <body>
+
+<div class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Changbai Mountain · Daily Log</div>
+    <h1>长白山天池 <em>开 / 关</em></h1>
+    <p class="sub">北坡 · 西坡 · 南坡 · 三个坡，三份答案</p>
+    <div class="meta">
+      <span>{{RANGE}}</span>
+      <span><b>{{TOTAL}}</b> 天</span>
+      <span><b>{{NDAILY}}</b> 篇逐日公报</span>
+      <span>更新 <b>{{BUILT_AT}}</b></span>
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
 
-<header>
-  <div class="eyebrow">逐日台账</div>
-  <h1>长白山北景区天池 <em>开 / 关</em></h1>
-  <div class="meta">
-    <span>{{RANGE}}</span>
-    <span><b>{{TOTAL}}</b> 天</span>
-    <span><b>{{NDAILY}}</b> 篇逐日公报</span>
-    <span>{{YR}} 年可游 <b>{{RATE}}%</b>（{{PLAY}}/{{REC}}）</span>
-    <span>更新 {{BUILT_AT}}</span>
-  </div>
-</header>
+<div class="scen" id="scen"></div>
 
 <div class="toolbar">
   <div class="tabs" id="tabs"></div>
   <div class="legend" id="legend"></div>
 </div>
 <div class="year-meta" id="ymeta"></div>
+<p class="calib">统计口径：三坡统一按「当天能否到达天池」计算——坡内其他景点（长白瀑布、锦江大峡谷等）是否单独开放不计入；北坡「仅天池车辆停运」记为不可达，西坡「天池景点暂停游览但大峡谷正常」同理。</p>
 <div class="months" id="months"></div>
-<p class="hint">悬停看当日原文口径与出处，点击有色格子打开公报原文，点图例可高亮单一状态。<br>灰格＝该日无任何可核实的公开记录，不代表开放也不代表关闭。2023–2025 年仅存零星单篇公报、无逐日记录，故整段留灰，不做插值。</p>
+<p class="hint">上方三张卡切换景区——同一份官方公报里，北、西、南三段是分别播报的，同一天三坡结论可能完全不同。<br>悬停看当日原文口径与出处，点击有色格子打开公报原文，点图例可高亮单一状态。<br>灰格＝该日无任何可核实的公开记录，不代表开放也不代表关闭；2023–2025 年仅存零星单篇公报、无逐日记录，故整段留灰，不做插值。<br>南坡每年 5 月中—10 月开放，其余时间为季节性闭园（深灰＝闭园，与因天气关闭是两回事）。</p>
 
 <h2 class="sec">三坡怎么选</h2>
 <p class="sec-sub">北、西、南三个景区互不连通，入口相距几十到一百多公里，一天只能玩一个坡。三坡都是同一个天池，差别在到达方式、视野和配套。</p>
@@ -231,6 +276,7 @@ footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-si
   数据截至 {{LATEST}} ｜ 最后构建 {{BUILT_AT}} ｜ 本次抓取 {{FETCH_STATE}}<br>
   逐日公报：长白山发布（澎湃号·政务，pphId 111214）｜ 媒体公告：央视网、光明网、环球网、中国吉林网、城市晚报、海报新闻等<br>
   交叉验证：去哪儿网长白山北景区票务页（天池主峰车票可订性）<br>
+  头图：长白山天池冬季全景（图虫创意素材库，仅作背景示意）<br>
   页面由 GitHub Actions 每日 18:00（北京时间）自动重建 ｜ 公报原文版权归长白山保护开发区融媒体中心
 </footer>
 
@@ -242,38 +288,90 @@ const DATA = {{DATA}};
 const DAYS = DATA.days;
 
 const SPEC = {
-  OPEN:{c:'var(--open)',n:'天池正常开放',t:'可游'},
-  OPEN_DELAY:{c:'var(--opendelay)',n:'延迟/限时开放',t:'可游'},
+  OPEN:{c:'var(--open)',n:'正常开放',t:'可游'},
+  OPEN_DELAY:{c:'var(--opendelay)',n:'延缓 / 限时开放',t:'可游'},
   PARTIAL:{c:'var(--partial)',n:'中途停止检票',t:'部分可游'},
   UNCERTAIN:{c:'var(--uncertain)',n:'是否开放待定',t:'不确定'},
   VEHICLE_STOP:{c:'var(--vehicle)',n:'仅天池车辆停运',t:'不可达'},
   CLOSED_TIANCHI:{c:'var(--closed)',n:'天池景点关闭',t:'不可游'},
-  CLOSED_AREA:{c:'var(--closedarea)',n:'北景区整体关闭',t:'不可游'},
+  CLOSED_AREA:{c:'var(--closedarea)',n:'景区整体关闭',t:'不可游'},
+  CLOSED_REPAIR:{c:'var(--repair)',n:'抢修 / 临时关闭',t:'不可游'},
+  CLOSED_SEASON:{c:'var(--season)',n:'季节性闭园',t:'闭园期'},
   NO_RECORD:{c:'var(--none)',n:'无公开记录',t:'信息真空'}
 };
-const ORDER = ['OPEN','OPEN_DELAY','PARTIAL','UNCERTAIN','VEHICLE_STOP','CLOSED_TIANCHI','CLOSED_AREA','NO_RECORD'];
+const ORDER = ['OPEN','OPEN_DELAY','PARTIAL','UNCERTAIN','VEHICLE_STOP',
+               'CLOSED_TIANCHI','CLOSED_AREA','CLOSED_REPAIR','CLOSED_SEASON','NO_RECORD'];
+const PLAY = ['OPEN','OPEN_DELAY','PARTIAL'];
 
+const SL = {
+  n:{k:'sn',g:'g', name:'北景区',sub:'北坡',note:'二道白河 · 倒站车直达主峰'},
+  w:{k:'sw',g:'gw',name:'西景区',sub:'西坡',note:'松江河 · 1442 级台阶'},
+  s:{k:'ss',g:'gs',name:'南景区',sub:'南坡',note:'5 月中—10 月开放'}
+};
+
+const map = {}; DAYS.forEach(d=>map[d.d]=d);
+const DOW = ['一','二','三','四','五','六','日'];
+const YEARS = [...new Set(DAYS.map(d=>d.d.slice(0,4)))].sort();
+const LATEST = DAYS[DAYS.length-1].d;
+
+let SLOPE = (location.hash||'').replace('#','') || 'n';
+if(!SL[SLOPE]) SLOPE='n';
 let active = null;
-(function(){
+let curYear = +YEARS[YEARS.length-1];
+
+const S = dt => (dt && dt[SL[SLOPE].k]) || 'NO_RECORD';
+const G = dt => (dt && dt[SL[SLOPE].g]) || '';
+
+function statOf(year, sk){
+  const key = SL[sk || SLOPE].k;
+  const ks = Object.keys(map).filter(k=>k.slice(0,4)===String(year));
+  let tot=0, rec=0, play=0;
+  ks.forEach(k=>{
+    tot++;
+    const s = (map[k] && map[k][key]) || 'NO_RECORD';
+    if(s!=='NO_RECORD'){ rec++; if(PLAY.includes(s)) play++; }
+  });
+  return {tot,rec,play};
+}
+function rateOf(year, sk){ const x=statOf(year, sk); return x.rec ? Math.round(x.play/x.rec*100)+'%' : '—'; }
+
+/* ---------- 三坡切换 ---------- */
+function renderScen(){
+  const el = document.getElementById('scen');
+  el.innerHTML = ['n','w','s'].map(k=>{
+    const o = SL[k];
+    return `<button data-k="${k}"${k===SLOPE?' class="on"':''}>`
+      + `<span class="sl">${o.name}</span>`
+      + `<span class="st">${o.sub}<span class="pill">${curYear} 可游 ${rateOf(curYear,k)}</span></span>`
+      + `<span class="sd">${o.note}</span></button>`;
+  }).join('');
+  el.querySelectorAll('button').forEach(b=>{
+    b.onclick = ()=>{
+      SLOPE = b.dataset.k;
+      active = null;
+      try{ history.replaceState(null,'','#'+SLOPE); }catch(e){}
+      renderScen(); renderLegend(); render(curYear);
+    };
+  });
+}
+
+/* ---------- 图例 ---------- */
+function renderLegend(){
   const el = document.getElementById('legend');
   el.innerHTML = ORDER.map(k=>`<div class="lg" data-s="${k}"><span class="sw" style="background:${SPEC[k].c}"></span>${SPEC[k].n}</div>`).join('');
   el.querySelectorAll('.lg').forEach(x=>{
     x.onclick = ()=>{
       const s = x.dataset.s;
-      active = (active===s)?null:s;
+      active = (active===s) ? null : s;
       el.querySelectorAll('.lg').forEach(y=>y.classList.toggle('dim', active && y.dataset.s!==active));
       document.querySelectorAll('.cell').forEach(c=>{
         c.classList.toggle('dim', active && c.dataset.s!==active);
       });
     };
   });
-})();
+}
 
-const map = {}; DAYS.forEach(d=>map[d.d]=d);
-const DOW = ['一','二','三','四','五','六','日'];
-const YEARS = [...new Set(DAYS.map(d=>d.d.slice(0,4)))].sort();
-let curYear = +YEARS[YEARS.length-1];
-
+/* ---------- 年份 ---------- */
 (function(){
   const el = document.getElementById('tabs');
   el.innerHTML = YEARS.map(y=>`<button class="tab${+y===curYear?' on':''}" data-y="${y}">${y}</button>`).join('');
@@ -282,6 +380,7 @@ let curYear = +YEARS[YEARS.length-1];
       el.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
       t.classList.add('on');
       curYear = +t.dataset.y;
+      renderScen();
       render(curYear);
     };
   });
@@ -293,21 +392,24 @@ function render(year){
   for (let m=1;m<=12;m++){
     const first = new Date(year, m-1, 1);
     const lastDay = new Date(year, m, 0).getDate();
-    let lead = (first.getDay()+6)%7;
+    const lead = (first.getDay()+6)%7;
     const cells = [];
     for(let i=0;i<lead;i++) cells.push(`<div class="cell empty"></div>`);
     for(let d=1; d<=lastDay; d++){
       const key = `${year}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
       const it = map[key];
       tot++;
-      if(!it){ cells.push(`<div class="cell empty"></div>`); continue; }
-      if(it.s!=='NO_RECORD'){ rec++; if(['OPEN','OPEN_DELAY','PARTIAL'].includes(it.s)) play++; }
+      if(!it){
+        cells.push(key > LATEST ? `<div class="cell fut">${d}</div>` : `<div class="cell empty"></div>`);
+        continue;
+      }
+      const s = S(it);
+      if(s!=='NO_RECORD'){ rec++; if(PLAY.includes(s)) play++; }
       const cls = ['cell'];
       if(it.lv==='media') cls.push('media');
       if(it.lv==='single') cls.push('single');
-      const bg = SPEC[it.s].c;
-      const fg = (it.s==='NO_RECORD')?'#b4b9be':'#fff';
-      cells.push(`<div class="${cls.join(' ')}" data-s="${it.s}" data-k="${key}" style="background:${bg};color:${fg}">${d}</div>`);
+      const fg = (s==='NO_RECORD')?'#b4b9be':'#fff';
+      cells.push(`<div class="${cls.join(' ')}" data-s="${s}" data-k="${key}" style="background:${SPEC[s].c};color:${fg}">${d}</div>`);
     }
     html += `<div class="mblock">
       <div class="mhead">${m} 月</div>
@@ -316,8 +418,10 @@ function render(year){
     </div>`;
   }
   el.innerHTML = html;
+  const o = SL[SLOPE];
   document.getElementById('ymeta').textContent =
-    `${year} 年：有记录 ${rec} / ${tot} 天，可游 ${play} 天` + (rec?`（占有记录 ${(play/rec*100).toFixed(1)}%）`:'');
+    `${o.name} · ${year} 年：有记录 ${rec} / ${tot} 天，可游 ${play} 天`
+    + (rec ? `（占有记录 ${(play/rec*100).toFixed(1)}%）` : '（该年无逐日记录）');
   bindTip();
 }
 
@@ -326,17 +430,21 @@ function bindTip(){
   document.querySelectorAll('.cell[data-k]').forEach(c=>{
     c.onmouseenter = e=>{
       const it = map[c.dataset.k];
-      const sp = SPEC[it.s];
+      const s = S(it), sp = SPEC[s];
       const dt = new Date(it.d);
       const wd = '日一二三四五六'[dt.getDay()];
       let h = `<div class="td">${it.d.replace(/-/g,'.')} 周${wd}<span class="ts" style="background:${sp.c};color:#fff">${sp.n}</span></div>`;
-      h += `<div style="color:#b9bfc6;font-size:11.5px">${sp.t}${it.r&&it.r.length?' · 成因：'+it.r.join('、'):''}</div>`;
-      if(it.g) h += `<div class="tg">${it.g}</div>`;
+      h += `<div style="color:#b9bfc6;font-size:11.5px">${SL[SLOPE].name} · ${sp.t}${it.r&&it.r.length?' · 成因：'+it.r.join('、'):''}</div>`;
+      const g = G(it);
+      if(g) h += `<div class="tg">${g}</div>`;
       if(it.n && it.lv==='media') h += `<div class="tg">媒体口径：${it.n}<br><span style="color:#8b9298">${it.ns||''}</span></div>`;
+      const others = ['n','w','s'].filter(k=>k!==SLOPE)
+        .map(k=>`${SL[k].sub} ${SPEC[it[SL[k].k]||'NO_RECORD'].n}`).join('　');
+      h += `<div class="tr">同一天：${others}</div>`;
       h += `<div class="tr">${it.src||'—'}${it.t?' · '+it.t:''}</div>`;
       tip.innerHTML = h; tip.classList.add('on');
       const x = Math.min(e.clientX+14, window.innerWidth-330);
-      const y = Math.min(e.clientY+14, window.innerHeight-220);
+      const y = Math.min(e.clientY+14, window.innerHeight-240);
       tip.style.left = Math.max(8,x)+'px'; tip.style.top = Math.max(8,y)+'px';
     };
     c.onmouseleave = ()=>tip.classList.remove('on');
@@ -349,7 +457,8 @@ function bindTip(){
 
 /* 历史锚点表已移除，不再填充 */
 
-
+renderScen();
+renderLegend();
 render(curYear);
 </script>
 </body>

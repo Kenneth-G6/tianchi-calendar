@@ -588,5 +588,135 @@
   "past_sale_cutoff": true,
   "checked_at": "2026-11-25 17:00",
   "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-26",
+   "2026-11-27",
+   "2026-12-03"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-25 20:51",
+  "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-26",
+   "2026-11-27",
+   "2026-12-03"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-25 20:53",
+  "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-26",
+   "2026-11-27",
+   "2026-12-03"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-25 20:54",
+  "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-26",
+   "2026-11-27",
+   "2026-12-03"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-25 20:54",
+  "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-26",
+   "2026-11-27",
+   "2026-12-03"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-25 20:55",
+  "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-26",
+   "2026-11-27",
+   "2026-12-03"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-25 20:55",
+  "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-26",
+   "2026-11-27",
+   "2026-12-03"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-25 20:55",
+  "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-26",
+   "2026-11-27",
+   "2026-12-03"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-25 20:56",
+  "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-26",
+   "2026-11-27",
+   "2026-12-03"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-25 20:56",
+  "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-26",
+   "2026-11-27",
+   "2026-12-03"
+  ],
+  "today_bookable": false,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": true,
+  "checked_at": "2026-11-25 20:57",
+  "err": ""
  }
 ]
