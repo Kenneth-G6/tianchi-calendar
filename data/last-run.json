@@ -1,5 +1,5 @@
 {
- "updated_at_cst": "2026-11-25 04:35:45",
+ "updated_at_cst": "2026-11-25 08:20:07",
  "missing_recent_dates": [],
  "today_in_cache": false,
  "latest_data_date": "2026-11-24",
@@ -7,7 +7,7 @@
  "list_api_ok": true,
  "scanned_articles": 100,
  "dailies_in_cache": 271,
- "new_details_fetched": 1,
+ "new_details_fetched": 0,
  "window_days": 1112,
  "figures": "2026",
  "play_rate_pct": 46.8,
