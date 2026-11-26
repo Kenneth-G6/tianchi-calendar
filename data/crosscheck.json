@@ -8,21 +8,6 @@
    "2026-11-16",
    "2026-11-18"
   ],
-  "today_bookable": false,
-  "tomorrow_bookable": true,
-  "past_sale_cutoff": true,
-  "checked_at": "2026-11-10 19:21",
-  "err": ""
- },
- {
-  "ok": true,
-  "bookable": [
-   "2026-11-11",
-   "2026-11-12",
-   "2026-11-15",
-   "2026-11-16",
-   "2026-11-18"
-  ],
   "today_bookable": true,
   "tomorrow_bookable": true,
   "past_sale_cutoff": false,
@@ -794,6 +779,18 @@
   "tomorrow_bookable": true,
   "past_sale_cutoff": true,
   "checked_at": "2026-11-26 16:49",
+  "err": ""
+ },
+ {
+  "ok": true,
+  "bookable": [
+   "2026-11-27",
+   "2026-11-28"
+  ],
+  "today_bookable": true,
+  "tomorrow_bookable": true,
+  "past_sale_cutoff": false,
+  "checked_at": "2026-11-27 03:28",
   "err": ""
  }
 ]
