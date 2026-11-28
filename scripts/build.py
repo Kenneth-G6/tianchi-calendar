@@ -565,6 +565,9 @@ def main():
         "{{FETCH_STATE}}": ("官方接口正常" if list_ok else "官方接口未响应，沿用缓存数据"),
         "{{FINDINGS}}": findings,
         "{{DATA}}": payload,
+        "{{BOOK}}": json.dumps({"ok": xc.get("ok"), "tb": xc.get("today_bookable"),
+                                "bk": xc.get("bookable"), "at": xc.get("checked_at")},
+                               ensure_ascii=False),
     }
     html = tpl
     for k, v in repl.items():

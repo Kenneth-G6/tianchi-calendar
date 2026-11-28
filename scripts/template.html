@@ -29,6 +29,8 @@ h1{font-size:clamp(34px,5.4vw,60px);line-height:1.02;font-weight:600;letter-spac
 .hero .sub{font-size:clamp(14px,1.5vw,18px);font-weight:400;color:rgba(255,255,255,.8);margin-top:14px;letter-spacing:-.01em;line-height:1.5}
 .hero .meta{color:rgba(255,255,255,.7)}
 .hero .meta b{color:#fff;font-weight:600}
+.hero .today{margin-top:16px;font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.66);letter-spacing:.01em;max-width:760px}
+.hero .today b{color:rgba(255,255,255,.92);font-weight:600}
 
 /* ---------- 三坡切换（分段控件）---------- */
 .scen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:22px 0 0}
@@ -186,6 +188,7 @@ footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-si
       <span><b>{{NDAILY}}</b> 篇逐日公报</span>
       <span>更新 <b>{{BUILT_AT}}</b></span>
     </div>
+    <p class="today" id="today"></p>
   </div>
 </div>
 
@@ -285,6 +288,7 @@ footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-si
 <script>
 const DATA = {{DATA}};
 const DAYS = DATA.days;
+const BOOK = {{BOOK}};
 
 const SPEC = {
   OPEN:{c:'var(--open)',n:'正常开放',t:'可游'},
@@ -335,6 +339,21 @@ function statOf(year, sk){
 function rateOf(year, sk){ const x=statOf(year, sk); return x.rec ? Math.round(x.play/x.rec*100)+'%' : '—'; }
 
 /* ---------- 三坡切换 ---------- */
+const TODAY = new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai'}).format(new Date());
+function mdOf(d){return String(+d.slice(5,7))+'月'+String(+d.slice(8,10))+'日';}
+function renderToday(){
+  const el=document.getElementById('today'); if(!el) return;
+  const td=map[TODAY];
+  const st=td?SPEC[S(td)].n:'';
+  const right=[];
+  if(BOOK && BOOK.ok){
+    right.push('主峰票当日'+(BOOK.tb?'仍可预订':'已不可订'));
+    if(BOOK.at) right.push('票务抓于 '+BOOK.at.slice(11,16));
+  }
+  el.innerHTML = td
+    ? `今日 <b>${mdOf(TODAY)}</b> ${SL[SLOPE].sub}：<b>${st}</b>` + (right.length?'　｜　'+right.join(' · '):'')
+    : `今日 <b>${mdOf(TODAY)}</b> 官方日报尚未发布` + (right.length?'　｜　'+right.join(' · '):'');
+}
 function renderScen(){
   const el = document.getElementById('scen');
   el.innerHTML = ['n','w','s'].map(k=>{
@@ -417,6 +436,7 @@ function render(year){
     </div>`;
   }
   el.innerHTML = html;
+  renderToday();
   const o = SL[SLOPE];
   document.getElementById('ymeta').textContent =
     `${o.name} · ${year} 年：有记录 ${rec} / ${tot} 天，可游 ${play} 天`
