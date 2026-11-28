@@ -408,7 +408,7 @@ function render(year){
       if(it.lv==='media') cls.push('media');
       if(it.lv==='single') cls.push('single');
       const fg = (s==='NO_RECORD')?'#b4b9be':'#fff';
-      cells.push(`<div class="${cls.join(' ')}" data-s="${s}" data-k="${key}" style="background:${SPEC[s].c};color:${fg}">${d}</div>`);
+      cells.push(`<div class="${cls.join(' ')}" data-s="${s}" data-k="${key}" style="background:${(SPEC[s]||SPEC.NO_RECORD).c};color:${fg}">${d}</div>`);
     }
     html += `<div class="mblock">
       <div class="mhead">${m} 月</div>

@@ -161,13 +161,17 @@ def classify(raw):
         return "CLOSED_AREA", "北景区整体关闭 / 停运"
     if re.search(r"天池(车辆|主峰车辆|主峰车)[^。]{0,30}(停运|停止运营|暂停运营)", j):
         return "VEHICLE_STOP", "天池车辆停运（景点未明示关闭）"
-    if re.search(r"天池[^。]{0,25}\d{1,2}[：:]\d{2}\s*停止检票", j):
+    if re.search(r"天池[^。]{0,25}\d{1,2}(?:时\d{1,2}分|[：:.．]\d{2})\s*停止检票", j) or \
+       re.search(r"天池[^。]{0,12}停止检票", j):
         return "PARTIAL", "天池中途停止检票"
-    if re.search(r"北(、西)?景区[^。]{0,25}\d{1,2}[：:]\d{2}\s*停止检票", j):
+    if re.search(r"北(、西)?景区[^。]{0,25}\d{1,2}(?:时\d{1,2}分|[：:.．]\d{2})\s*停止检票", j):
         return "PARTIAL", "北景区中途停止检票"
-    if re.search(r"是否开放视清雪进度|视清雪进度确定", j):
-        return "UNCERTAIN", "是否开放视清雪进度确定"
-    if re.search(r"天池[^。]{0,25}(开始检票|延缓|推迟)", j):
+    if re.search(r"是否开放[^。]{0,8}(?:确定|而定|待定)", j) or \
+       re.search(r"视(?:清雪进度|天气情况)[^。]{0,6}(?:确定|而定)", j):
+        return "UNCERTAIN", "是否开放视天气 / 清雪进度确定"
+    if re.search(r"天池[^。]{0,25}(开始检票|延缓|推迟)", j) or \
+       re.search(r"预计\s*\d{1,2}(?:时\d{1,2}分|[：:.．]\d{2})\s*(?:分)?\s*(?:通车|运营|开放)", j) or \
+       re.search(r"\d{1,2}(?:时\d{1,2}分|[：:.．]\d{2})\s*分?\s*(?:通车|开始运营)", j):
         return "OPEN_DELAY", "天池延迟 / 限时开放"
     if re.search(r"天池[^。]{0,25}(正常开放|开放)", j) or \
        (re.search(r"天池、", j) and re.search(r"正常开放", j)):
